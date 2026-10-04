@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>[hidden]{display:none!important}</style>
+<meta name="theme-color" content="#f4eee2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ciclo">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<title>Ciclo das Quintas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4eee2; --bg2:#ebe3d3; --card:#fffcf6; --ink:#211c16; --ink2:#4a4238; --muted:#857a6c;
+  --line:#e2d8c6; --line2:#cfc3ae; --accent:#b8432a; --accent-soft:#f3d9cf; --blue:#2c5f80;
+  --s0:#cfc6b8; --s1:#e0a43a; --s2:#4b86b4; --s3:#3e9a5f; --warn-bg:#fbe7c2; --warn-fg:#8a5a00; --ok:#3e9a5f;
+  --white-key:#fffefb; --black-key:#2a241e; --shadow:0 1px 2px rgba(60,40,10,.06),0 6px 22px rgba(60,40,10,.07);
+  --serif:"Fraunces", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --sans:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15120e; --bg2:#1d1914; --card:#211d17; --ink:#f1e9dc; --ink2:#cfc4b3; --muted:#958a7a;
+    --line:#352e25; --line2:#4a4134; --accent:#e9785b; --accent-soft:#4a2a20; --blue:#7fb2d6;
+    --s0:#4a4237; --warn-bg:#4a3a12; --warn-fg:#f0c76a; --ok:#6cc48d; --white-key:#efe8dc; --black-key:#0f0d0a; --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 22px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15120e; --bg2:#1d1914; --card:#211d17; --ink:#f1e9dc; --ink2:#cfc4b3; --muted:#958a7a;
+  --line:#352e25; --line2:#4a4134; --accent:#e9785b; --accent-soft:#4a2a20; --blue:#7fb2d6;
+  --s0:#4a4237; --warn-bg:#4a3a12; --warn-fg:#f0c76a; --ok:#6cc48d; --white-key:#efe8dc; --black-key:#0f0d0a; --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 22px rgba(0,0,0,.35);
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.45;
+  background-image:radial-gradient(circle at 12% -10%, rgba(184,67,42,.07), transparent 40%),radial-gradient(circle at 100% 0%, rgba(44,95,128,.07), transparent 40%);
+  background-attachment:fixed;min-height:100vh;padding-bottom:90px}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:600;margin:0;letter-spacing:-.01em}
+.acc{font-family:var(--sans);font-weight:500;margin-left:.04em}
+.dacc{font-weight:700}
+
+/* ---------- topo ---------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);padding:10px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto}
+.brand h1{font-size:22px;line-height:1}
+.brand small{display:block;color:var(--muted);font-size:12.5px;margin-top:3px;letter-spacing:.02em}
+.tabs{display:flex;gap:4px;background:var(--bg2);padding:4px;border-radius:999px;border:1px solid var(--line)}
+.tabs button{border:0;background:transparent;padding:8px 16px;border-radius:999px;font-weight:600;font-size:14.5px;color:var(--ink2)}
+.tabs button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+.wrap{max-width:1480px;margin:0 auto;padding:18px 16px}
+.view{display:none}.view.on{display:block}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+.pad{padding:18px 20px}
+.muted{color:var(--muted)}
+.btn{border:1px solid var(--line2);background:var(--card);padding:8px 14px;border-radius:12px;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:6px;min-height:40px}
+.btn:hover{border-color:var(--ink2)}
+.btn:focus-visible,.pill:focus-visible,.tog:focus-visible,.kchip:focus-visible,.mcell:focus-visible,.ibtn:focus-visible,.seg button:focus-visible,.tabs button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.btn.armed{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.sm{padding:5px 10px;min-height:32px;font-size:13px;border-radius:10px}
+.btn.ghost{background:transparent}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:999px;background:var(--bg2);border:1px solid var(--line);font-size:13px;font-weight:500;color:var(--ink2)}
+button.pill:hover{border-color:var(--ink2)}
+.tag{font-family:var(--sans);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:6px;background:var(--bg2);color:var(--muted);vertical-align:middle}
+.tag.warn{background:var(--warn-bg);color:var(--warn-fg)}
+.sync{font-size:12px;font-weight:600;color:var(--muted);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.sync i{width:8px;height:8px;border-radius:50%;background:var(--line2);display:inline-block}
+.sync.on i{background:var(--ok)}
+.sync.busy i{background:var(--s1)}
+
+/* ---------- ciclo ---------- */
+.ciclo-grid{display:grid;grid-template-columns:minmax(380px,44%) 1fr;gap:20px;align-items:start}
+.wheel-col{position:sticky;top:calc(78px + env(safe-area-inset-top,0px));display:flex;flex-direction:column;gap:14px}
+.wheel-card{padding:12px 12px 14px}
+#wheel{width:100%;height:auto;display:block;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+#rot{transform:rotate(var(--rot,0deg));transition:transform .9s cubic-bezier(.5,.05,.2,1)}
+.up{transform:rotate(calc(-1 * var(--rot,0deg)));transition:transform .9s cubic-bezier(.5,.05,.2,1)}
+.sector{cursor:pointer;stroke:var(--card);stroke-width:2;transition:filter .2s}
+.sector:hover{filter:brightness(1.07) saturate(1.1)}
+.sector.sel{stroke:var(--ink);stroke-width:3.5}
+.wtxt{pointer-events:none;font-family:var(--serif);fill:#231c14}
+.wtxt.small{font-family:var(--sans);font-weight:500}
+.wsig{pointer-events:none;font-family:var(--sans);font-size:11.5px;font-weight:600;fill:var(--muted)}
+.wnum{pointer-events:none;font-family:var(--serif);font-style:italic;font-weight:700;fill:var(--accent)}
+.wwin{fill:none;stroke:var(--accent);stroke-width:3;stroke-dasharray:7 5;pointer-events:none}
+.wprog{fill:none;stroke-linecap:round;stroke-width:4;pointer-events:none}
+.wcenter text{pointer-events:none}
+.wheel-tools{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.tog{border:1px solid var(--line);background:var(--bg2);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;color:var(--muted)}
+.tog.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.keystrip{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center;font-size:13px}
+.keystrip .lab{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+.keystrip .row{gap:5px}
+.kchip{border:1px solid var(--line);background:var(--card);border-radius:9px;padding:4px 9px;font-family:var(--serif);font-weight:600;font-size:15px;min-width:40px}
+.kchip.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.tips{font-size:14px;color:var(--ink2)}
+.tips h4{font-size:16px;margin-bottom:8px}
+.tips ul{margin:0;padding-left:18px}.tips li{margin:5px 0}
+.tips b{color:var(--ink)}
+
+/* ---------- detalhe ---------- */
+.detail{display:flex;flex-direction:column;gap:16px;min-width:0}
+.secbody>*{min-width:0}
+.dhead{padding:20px 22px;position:relative;overflow:hidden}
+.dhead::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:var(--kc,var(--accent))}
+.dtitle{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.dtitle h2{font-size:clamp(30px,4vw,44px);line-height:1.05}
+.dtitle .rel{font-family:var(--serif);font-size:20px;color:var(--muted)}
+.dsig{margin-top:6px;font-size:15px;color:var(--ink2)}
+.dhead-grid{display:grid;grid-template-columns:1fr minmax(220px,300px);gap:16px;align-items:start;margin-top:10px}
+.staff{width:100%;max-width:300px;height:auto;justify-self:end}
+.staff line{stroke:var(--ink2);stroke-width:1}
+.staff .sacc path{stroke:var(--ink);fill:none}
+.staff text{fill:var(--muted);font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:.04em}
+.nbrs{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.nbrs .pill b{font-family:var(--serif);color:var(--ink);font-weight:600}
+.sec{padding:0;overflow:hidden}
+.sec>summary,.sech{list-style:none;padding:15px 20px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.sec>summary::-webkit-details-marker{display:none}
+.sec>summary h3,.sech h3{font-size:20px}
+.sec>summary .chev{margin-left:auto;transition:transform .2s;color:var(--muted)}
+.sec[open]>summary .chev{transform:rotate(180deg)}
+.sec>summary .hint{color:var(--muted);font-size:13px}
+.secbody{padding:0 14px 14px;display:flex;flex-direction:column;gap:10px}
+.scale{border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden}
+.scale.open{border-color:var(--line2);box-shadow:var(--shadow)}
+.shead{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center;padding:11px 12px 12px;cursor:pointer}
+.shead>.notes,.shead>.nrows{grid-column:1/-1;grid-row:2}
+.nrows{display:flex;flex-direction:column;gap:5px}
+.sname{font-family:var(--serif);font-weight:600;font-size:18px;line-height:1.15}
+.sname .tag{margin-left:2px}
+.sname small{display:block;font-family:var(--sans);font-size:12px;color:var(--muted);font-weight:500;margin-top:3px}
+.notes{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.notes .dir{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;width:44px}
+.chip{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;min-width:44px;padding:4px 7px 3px;border-radius:10px;background:var(--bg2);border:1px solid var(--line);line-height:1.1}
+.chip b{font-family:var(--serif);font-weight:600;font-size:17px;white-space:nowrap}
+.chip i{font-style:normal;font-size:10.5px;color:var(--muted);font-weight:600;margin-top:2px}
+.chip.t{background:var(--kc,var(--accent));border-color:transparent}
+.chip.t b,.chip.t i{color:#1e1710}
+.chip.alt{border-color:var(--accent);border-style:dashed}
+.ext .chip b{font-size:14px}
+.sact{display:flex;gap:6px;align-items:center}
+.ibtn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line2);background:var(--card);display:inline-grid;place-items:center;font-size:14px;flex:none}
+.ibtn:hover{border-color:var(--ink)}
+.stbtn{display:flex;gap:3px;padding:6px;border-radius:10px;border:1px solid var(--line);background:var(--bg2)}
+.stbtn span{width:7px;height:20px;border-radius:3px;background:var(--line2)}
+.stbtn.s1 span:nth-child(-n+1){background:var(--s1)}
+.stbtn.s2 span:nth-child(-n+2){background:var(--s2)}
+.stbtn.s3 span:nth-child(-n+3){background:var(--s3)}
+.sbody{border-top:1px solid var(--line);padding:14px;display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+.kbd{width:100%;max-width:640px;height:auto;display:block}
+.kbd .w{fill:var(--white-key);stroke:var(--line2);stroke-width:1}
+.kbd .b{fill:var(--black-key);stroke:var(--black-key)}
+.kbd .w.on{fill:color-mix(in srgb,var(--kc,#e9a) 55%,var(--white-key))}
+.kbd .b.on{fill:color-mix(in srgb,var(--kc,#e9a) 75%,#000)}
+.kbd .on.ton{stroke:var(--ink);stroke-width:2}
+.kbd .hit{fill:var(--accent)!important}
+.kbd text{font-family:var(--sans);font-weight:700;font-size:10px;pointer-events:none}
+.kbd .lw{fill:#3a2e22}.kbd .lbk{fill:#fff}
+.kbd .mc{fill:var(--muted)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:10px}
+.fact{background:var(--bg2);border-radius:12px;padding:10px 12px;font-size:14px}
+.fact .k{font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:var(--muted);margin-bottom:3px}
+.fing{border-collapse:collapse;font-size:14px}
+.fing td,.fing th{padding:3px 7px;text-align:center;border-bottom:1px solid var(--line)}
+.fing th{font-weight:600;color:var(--muted);text-align:left;font-size:12px}
+.fing td.n{font-family:var(--serif);font-weight:600}
+.fing td.f{font-weight:700;color:var(--blue)}
+.ctrl{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ctrl label{font-size:13px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:6px}
+.ctrl input[type=number]{width:74px;padding:7px 8px;border-radius:10px;border:1px solid var(--line2);background:var(--card)}
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line2);border-radius:11px;overflow:hidden}
+.seg button{border:0;background:var(--card);padding:7px 11px;font-size:13px;font-weight:600;color:var(--muted);border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button.on.s0{background:var(--s0);color:var(--ink)}
+.seg button.on.s1{background:var(--s1);color:#2a1d00}
+.seg button.on.s2{background:var(--s2);color:#fff}
+.seg button.on.s3{background:var(--s3);color:#fff}
+.seg button.on.x{background:var(--ink);color:var(--card)}
+.field{overflow-x:auto}
+.field table{border-collapse:separate;border-spacing:4px;min-width:560px;width:100%}
+.field th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;text-align:left;padding:2px 6px;white-space:nowrap}
+.field td{background:var(--bg2);border-radius:9px;text-align:center;padding:7px 4px;font-family:var(--serif);font-weight:600;font-size:16px;white-space:nowrap}
+.field td.rn{background:transparent;font-style:italic;color:var(--accent);font-size:17px}
+.field h4{font-size:15px;margin:6px 4px}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.thumb{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--bg2);aspect-ratio:4/3;cursor:zoom-in;padding:0}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.drop{border:2px dashed var(--line2);border-radius:14px;padding:16px;text-align:center;color:var(--muted);font-size:14px;background:repeating-linear-gradient(-45deg,transparent 0 10px,color-mix(in srgb,var(--bg2) 60%,transparent) 10px 20px)}
+.drop.hover{border-color:var(--accent);color:var(--accent)}
+.drop kbd,.kbdk{font-family:var(--sans);font-size:12px;border:1px solid var(--line2);border-bottom-width:2px;border-radius:6px;padding:1px 6px;background:var(--card);color:var(--ink)}
+textarea.notes-area{width:100%;min-height:90px;border-radius:12px;border:1px solid var(--line2);background:var(--card);padding:10px 12px;resize:vertical}
+
+/* ---------- prática ---------- */
+.pgrid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;align-items:start}
+.span4{grid-column:span 4}.span5{grid-column:span 5}.span7{grid-column:span 7}.span8{grid-column:span 8}.span12{grid-column:span 12}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--bg2);border-radius:14px;padding:12px}
+.stat b{display:block;font-family:var(--serif);font-size:30px;line-height:1.05}
+.stat span{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.bars{display:flex;align-items:flex-end;gap:4px;height:70px;margin-top:12px}
+.bars div{flex:1;background:var(--accent);border-radius:4px 4px 2px 2px;min-height:2px;opacity:.85;position:relative}
+.bars div.z{background:var(--line2);opacity:1}
+.barlab{display:flex;gap:4px;font-size:10px;color:var(--muted);margin-top:3px}.barlab span{flex:1;text-align:center}
+.matrix{overflow-x:auto}
+.matrix table{border-collapse:separate;border-spacing:4px;width:100%;min-width:520px}
+.matrix th{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;padding:4px}
+.matrix td.k{font-family:var(--serif);font-weight:600;font-size:16px;white-space:nowrap;padding-right:8px}
+.matrix td.k button{border:0;background:none;padding:0;font:inherit;text-align:left}
+.mcell{width:100%;border:0;border-radius:9px;padding:9px 4px;font-size:12px;font-weight:700;background:var(--bg2);color:var(--muted)}
+.mcell.s1{background:var(--s1);color:#2a1d00}.mcell.s2{background:var(--s2);color:#fff}.mcell.s3{background:var(--s3);color:#fff}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:4px;vertical-align:-2px;margin-right:4px}
+.sessbig{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.sessbig h2{font-size:clamp(28px,4vw,40px)}
+.timer{font-family:var(--serif);font-size:34px;font-variant-numeric:tabular-nums;margin-left:auto}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;align-items:end}
+.form label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:600;color:var(--muted)}
+.form input,.form select,.inp{padding:9px 10px;border-radius:10px;border:1px solid var(--line2);background:var(--card);min-height:40px}
+.loglist{display:flex;flex-direction:column;gap:6px;max-height:420px;overflow:auto;margin-top:12px}
+.logi{display:grid;grid-template-columns:86px 1fr auto auto;gap:10px;align-items:center;padding:8px 10px;border-radius:10px;background:var(--bg2);font-size:14px}
+.logi .d{font-weight:700;font-size:12.5px;color:var(--muted)}
+.logi .m{font-family:var(--serif);font-weight:600}
+
+/* ---------- galeria ---------- */
+.gtools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.gcard{overflow:hidden;display:flex;flex-direction:column}
+.gcard .im{aspect-ratio:4/3;background:var(--bg2);cursor:zoom-in;border:0;padding:0;display:block;width:100%}
+.gcard .im img{width:100%;height:100%;object-fit:contain;display:block}
+.gcard .meta{padding:10px;display:flex;flex-direction:column;gap:6px}
+.gcard input,.gcard select{width:100%;padding:7px 9px;border-radius:9px;border:1px solid var(--line2);background:var(--card);font-size:14px}
+.gcard .foot{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted)}
+.empty{padding:30px;text-align:center;color:var(--muted)}
+
+/* ---------- lightbox ---------- */
+.lb{position:fixed;inset:0;background:rgba(10,8,6,.97);z-index:80;display:none;flex-direction:column}
+.lb.on{display:flex}
+.lb .lbtop{display:flex;align-items:center;gap:10px;padding:10px 14px;color:#eee}
+.lb .lbtop .cap{margin-right:auto;font-weight:600}
+.lb .lbtop button{background:rgba(255,255,255,.12);border:0;color:#fff;border-radius:10px;padding:8px 12px;font-weight:600}
+.lb .lbimg{flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:8px}
+.lb .lbimg img{max-width:100%;max-height:100%;object-fit:contain;cursor:zoom-in;background:#fff}
+.lb .lbimg.zoom{align-items:flex-start;justify-content:flex-start}
+.lb .lbimg.zoom img{max-width:none;max-height:none;cursor:zoom-out}
+
+/* ---------- metrônomo ---------- */
+.metro-fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;border:0;border-radius:999px;background:var(--ink);color:var(--card);padding:12px 18px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.25);display:flex;gap:8px;align-items:center;font-size:15px}
+.metro-fab .dot{width:10px;height:10px;border-radius:50%;background:var(--line2)}
+.metro-fab.run .dot{background:var(--accent)}
+.metro{position:fixed;right:16px;bottom:calc(74px + env(safe-area-inset-bottom,0px));z-index:60;width:320px;max-width:calc(100vw - 32px);padding:16px;display:none}
+.metro.on{display:block}
+.metro .bpm{font-family:var(--serif);font-size:56px;text-align:center;line-height:1;font-variant-numeric:tabular-nums}
+.metro .bpm small{font-size:16px;color:var(--muted);font-family:var(--sans)}
+.metro input[type=range]{width:100%;accent-color:var(--accent)}
+.beats{display:flex;gap:6px;justify-content:center;margin:12px 0}
+.beats span{width:16px;height:16px;border-radius:50%;background:var(--line2);transition:transform .08s}
+.beats span.a{background:var(--accent);transform:scale(1.3)}
+.beats span.first{outline:2px solid var(--ink2);outline-offset:2px}
+.mrow{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.tempo-name{text-align:center;font-family:var(--serif);font-style:italic;color:var(--muted);margin-top:2px}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(30px);background:var(--ink);color:var(--card);padding:11px 18px;border-radius:12px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:90;max-width:calc(100vw - 32px);text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.settings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.settings-grid h3{font-size:19px;margin-bottom:10px}
+.settings-grid p{margin:6px 0 12px;color:var(--ink2);font-size:14px}
+
+
+/* ---------- modais / partitura ---------- */
+.modal{position:fixed;inset:0;z-index:85;background:rgba(15,10,5,.58);display:flex;align-items:flex-start;justify-content:center;padding:calc(18px + env(safe-area-inset-top,0px)) 12px calc(18px + env(safe-area-inset-bottom,0px));overflow-y:auto;-webkit-overflow-scrolling:touch}
+.modal[hidden]{display:none}
+.mbox{width:100%;max-width:1120px;padding:20px 22px;margin:0 auto;min-width:0}
+.mhead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.mhead h2{font-size:clamp(24px,3.4vw,34px);text-wrap:balance}
+.eyebrow{font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+.mctrl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:16px 0 10px}
+.mnote{font-size:13.5px;color:var(--ink2);background:var(--bg2);border-radius:12px;padding:9px 12px}
+.msec{font-size:19px;margin:22px 2px 10px}
+.scorewrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px 6px;margin-top:10px}
+.score,.cstaff{width:100%;height:auto;display:block;margin:0 auto}
+.score .sl,.cstaff .sl{stroke:var(--ink2);stroke-width:1}
+.score .bl,.cstaff .bl{stroke:var(--ink);stroke-width:1.2}
+.score .led,.cstaff .led{stroke:var(--ink);stroke-width:1.2}
+.score .nh,.cstaff .nh,.score .fillink,.cstaff .fillink{fill:var(--ink)}
+.cstaff .wh{fill:var(--card)}
+.score .stem{stroke:var(--ink);stroke-width:1.3}
+.score .acg path,.cstaff .acg path{stroke:var(--ink);fill:none}
+.clef path{stroke:var(--ink)}.clef circle{fill:var(--ink)}
+.score .brace{stroke:var(--ink);fill:none;stroke-width:2.2}
+.score .fg{fill:var(--blue);font:700 11px var(--sans);paint-order:stroke;stroke:var(--card);stroke-width:3.5px;stroke-linejoin:round}
+.score .ott{fill:var(--muted);font:italic 600 11.5px var(--serif)}
+.score .ottl{stroke:var(--muted);fill:none;stroke-dasharray:3 3}
+.score .colhl{fill:var(--accent-soft);opacity:0;transition:opacity .08s}
+.score .colhl.on{opacity:1}
+.cstaff .clab{fill:var(--muted);font:600 10.5px var(--sans)}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(230px,100%),1fr));gap:10px}
+.invgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:10px}
+.vcard{border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px;background:var(--card);min-width:0}
+.vcard.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.vcard .cf{font-family:var(--serif);font-weight:700;font-size:21px}
+.vcard .nm{font-size:12px;color:var(--muted)}
+.vcard .ns{font-family:var(--serif);font-weight:600;font-size:14.5px}
+.field td.ch{cursor:pointer;transition:background .15s}
+.field td.ch:hover,.field td.ch:focus-visible{background:var(--accent-soft);outline:none}
+.eye svg{display:block}
+@media (prefers-reduced-motion: reduce){#rot,.up{transition:none}}
+@media (max-width:1100px){.span4,.span5,.span7,.span8{grid-column:span 12}}
+@media (max-width:980px){
+  .ciclo-grid{grid-template-columns:1fr}
+  .wheel-col{position:static}
+  .wheel-card{max-width:620px;margin:0 auto;width:100%}
+}
+@media (max-width:720px){
+  .dhead-grid{grid-template-columns:1fr}
+  .brand h1{font-size:19px}
+  .tabs{width:100%;justify-content:space-between}
+  .tabs button{padding:8px 10px;font-size:13.5px}
+  .logi{grid-template-columns:70px 1fr auto}
+  .logi .m{display:none}
+  .stats{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+
+<header class="top">
+  <div class="brand">
+    <svg width="38" height="38" viewBox="-20 -20 40 40" aria-hidden="true">
+      <g id="brandwheel"></g><circle r="7" fill="var(--card)" stroke="var(--line2)"/>
+    </svg>
+    <div><h1>Ciclo das Quintas</h1><small>caderno de escalas ao piano</small></div>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button data-act="view" data-view="ciclo" class="on">Ciclo &amp; Escalas</button>
+    <button data-act="view" data-view="pratica">Prática</button>
+    <button data-act="view" data-view="galeria">Galeria</button>
+    <button data-act="view" data-view="ajustes">Ajustes</button>
+  </nav>
+  <span class="sync" id="sync" title="Onde seus dados estão salvos"><i></i><span>neste aparelho</span></span>
+</header>
+
+<div class="wrap">
+  <!-- CICLO -->
+  <section class="view on" id="v-ciclo">
+    <div class="ciclo-grid">
+      <aside class="wheel-col">
+        <div class="card wheel-card">
+          <svg id="wheel" viewBox="-272 -272 544 544" role="img" aria-label="Ciclo das quintas interativo"></svg>
+          <div class="wheel-tools" id="wheeltools"></div>
+        </div>
+        <div class="card pad keystrip" id="keystrip"></div>
+        <div class="card pad tips">
+          <h4>Como ler o ciclo</h4>
+          <ul>
+            <li><b>Sentido horário</b>: cada passo sobe uma <b>quinta justa</b> e acrescenta um sustenido (ou tira um bemol).</li>
+            <li><b>Sentido anti-horário</b>: cada passo sobe uma <b>quarta justa</b> e acrescenta um bemol.</li>
+            <li><b>Ordem dos sustenidos</b>: Fá – Dó – Sol – Ré – Lá – Mi – Si. <b>Ordem dos bemóis</b>: Si – Mi – Lá – Ré – Sol – Dó – Fá (a mesma, ao contrário).</li>
+            <li>Com sustenidos, a tônica maior fica <b>um semitom acima do último sustenido</b>. Com bemóis, a tônica é o <b>penúltimo bemol</b> (Fá maior, com 1 bemol, se decora).</li>
+            <li>Anel interno: a <b>relativa menor</b> — mesma armadura, tônica no 6º grau da maior (3 semitons abaixo).</li>
+            <li>A <b>janela tracejada</b> mostra os seis acordes diatônicos da tonalidade: I, IV, V (maiores) e ii, iii, vi (menores). O vii° fica de fora.</li>
+            <li>Embaixo do ciclo estão as <b>enharmônicas</b>: Si = Dó♭, Fá♯ = Sol♭, Ré♭ = Dó♯.</li>
+          </ul>
+        </div>
+      </aside>
+      <main class="detail" id="detail"></main>
+    </div>
+  </section>
+
+  <!-- PRÁTICA -->
+  <section class="view" id="v-pratica">
+    <div class="pgrid">
+      <div class="card pad span5" id="p-stats"></div>
+      <div class="card pad span7" id="p-sess"></div>
+      <div class="card pad span7">
+        <div class="row" style="justify-content:space-between;margin-bottom:6px">
+          <h3 style="font-size:21px">Mapa de domínio</h3>
+          <span class="muted" style="font-size:13px">toque numa célula para avançar o estágio</span>
+        </div>
+        <div class="matrix" id="p-matrix"></div>
+        <div class="legend">
+          <span><i style="background:var(--s0)"></i>Não iniciada</span><span><i style="background:var(--s1)"></i>Aprendendo</span>
+          <span><i style="background:var(--s2)"></i>Fluente</span><span><i style="background:var(--s3)"></i>Dominada</span>
+        </div>
+      </div>
+      <div class="card pad span5" id="p-log"></div>
+    </div>
+  </section>
+
+  <!-- GALERIA -->
+  <section class="view" id="v-galeria">
+    <div class="card pad" style="margin-bottom:16px">
+      <div class="drop" id="gdrop">
+        <div style="font-family:var(--serif);font-size:20px;color:var(--ink);margin-bottom:4px">Cole seus prints aqui</div>
+        Tire um print e aperte <kbd>Ctrl</kbd> + <kbd>V</kbd> em qualquer tela do site, ou arraste a imagem para cá. No tablet, use o botão abaixo para escolher da galeria.
+        <div class="row" style="justify-content:center;margin-top:12px">
+          <button class="btn pri" data-act="file-btn">Escolher imagem</button>
+        </div>
+        <div style="margin-top:10px;font-size:12.5px">Novas imagens vão para: <b id="gtarget"></b></div>
+      </div>
+    </div>
+    <div class="gtools">
+      <label class="muted" style="font-weight:600;font-size:13px">Mostrar</label>
+      <select class="inp" id="gfilter"></select>
+      <span class="muted" id="gcount" style="font-size:13px;margin-left:auto"></span>
+    </div>
+    <div class="ggrid" id="ggrid"></div>
+  </section>
+
+  <!-- AJUSTES -->
+  <section class="view" id="v-ajustes">
+    <div class="settings-grid">
+      <div class="card pad">
+        <h3>Nomes das notas</h3>
+        <p>Como as notas aparecem nas escalas.</p>
+        <div class="seg" id="set-names"></div>
+        <p style="margin-top:14px">Exemplo: <span id="names-ex" style="font-family:var(--serif);font-weight:600"></span></p>
+      </div>
+      <div class="card pad">
+        <h3>Onde ficam seus dados</h3>
+        <p id="sync-info"></p>
+      </div>
+      <div class="card pad">
+        <h3>Backup</h3>
+        <p>Um arquivo com progresso, diário, anotações e imagens. Serve para guardar uma cópia ou trazer dados da versão em arquivo local.</p>
+        <div class="row">
+          <button class="btn pri" data-act="export">Exportar backup</button>
+          <button class="btn" data-act="import">Importar backup</button>
+        </div>
+        <p id="storage-info" class="muted" style="font-size:13px"></p>
+      </div>
+      <div class="card pad">
+        <h3>Zerar dados</h3>
+        <p>Apaga progresso e diário (as imagens ficam, a menos que marque abaixo).</p>
+        <label style="display:flex;gap:8px;align-items:center;font-size:14px;margin-bottom:10px"><input type="checkbox" id="wipe-imgs"> apagar também todas as imagens</label>
+        <button class="btn" data-act="wipe" style="border-color:var(--accent);color:var(--accent)">Zerar</button>
+        <p class="muted" style="font-size:12.5px">Toque duas vezes para confirmar.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<button class="metro-fab" id="metrofab" data-act="metro-panel"><span class="dot"></span><span>♩ <span id="fabbpm">80</span></span></button>
+<div class="card metro" id="metro"></div>
+
+<div class="lb" id="lb">
+  <div class="lbtop"><span class="cap" id="lbcap"></span><button data-act="lb-prev">‹</button><button data-act="lb-next">›</button><button data-act="lb-close">Fechar ✕</button></div>
+  <div class="lbimg" id="lbimg"><img alt="" id="lbi"></div>
+</div>
+<div class="modal" id="modal" hidden><div class="card mbox" role="dialog" aria-modal="true" id="mbody"></div></div>
+<div class="toast" id="toast"></div>
+<input type="file" id="fileinp" accept="image/*" multiple hidden>
+<input type="file" id="importinp" accept="application/json,.json" hidden>
+
+<script>
+'use strict';
+/* =====================================================================
+   TEORIA MUSICAL — tudo calculado, nada digitado à mão
+   Nota = { l: letra 0..6 (C D E F G A B), a: acidente -2..+2 }
+   ===================================================================== */
+const LET = ['C','D','E','F','G','A','B'];
+const PT  = ['Dó','Ré','Mi','Fá','Sol','Lá','Si'];
+const NAT = [0,2,4,5,7,9,11];
+const FIF = [0,2,4,-1,1,3,5];           // posição na linha das quintas
+const MAJREF = [0,2,4,5,7,9,11];
+
+function N(str){
+  const l = LET.indexOf(str[0].toUpperCase()); let a = 0;
+  for (const c of str.slice(1)) { if (c==='#') a++; else if (c==='b') a--; else if (c==='x') a+=2; }
+  return {l, a};
+}
+const pcOf   = n => ((NAT[n.l] + n.a) % 12 + 12) % 12;
+const fifths = n => FIF[n.l] + 7*n.a;
+const kStr   = n => LET[n.l] + (n.a > 0 ? '#'.repeat(n.a) : 'b'.repeat(-n.a));
+const ACC_SYM = {'-2':'♭♭','-1':'♭','0':'','1':'♯','2':'×'};
+const ACC_EXT = {'-2':' dobrado bemol','-1':' bemol','0':'','1':' sustenido','2':' dobrado sustenido'};
+
+function nmText(n, mode){
+  mode = mode || S.settings.names;
+  if (mode === 'ext') return PT[n.l] + ACC_EXT[n.a];
+  return (mode === 'en' ? LET[n.l] : PT[n.l]) + ACC_SYM[n.a];
+}
+function nm(n, mode){
+  mode = mode || S.settings.names;
+  if (mode === 'ext') return PT[n.l] + (n.a ? '<span class="acc" style="font-size:.85em">'+ACC_EXT[n.a]+'</span>' : '');
+  const base = mode === 'en' ? LET[n.l] : PT[n.l];
+  if (!n.a) return base;
+  return base + '<span class="acc'+(Math.abs(n.a)===2?' dacc':'')+'"'+(n.a===2?' title="dobrado sustenido"':'')+'>'+ACC_SYM[n.a]+'</span>';
+}
+const cifra = n => LET[n.l] + ACC_SYM[n.a];
+
+const SC = {
+  maj : {suf:'maior',              tag:'Jônio',      semis:[0,2,4,5,7,9,11], sig: 0},
+  nat : {suf:'menor natural',      tag:'Eólio',      semis:[0,2,3,5,7,8,10], sig:-3},
+  harm: {suf:'menor harmônica',    tag:'',           semis:[0,2,3,5,7,8,11], sig:-3},
+  mel : {suf:'menor melódica',     tag:'',           semis:[0,2,3,5,7,9,11], sig:-3, desc:'nat'},
+  dor : {suf:'dórico',             tag:'modo II',    semis:[0,2,3,5,7,9,10], sig:-2},
+  fri : {suf:'frígio',             tag:'modo III',   semis:[0,1,3,5,7,8,10], sig:-4},
+  lid : {suf:'lídio',              tag:'modo IV',    semis:[0,2,4,6,7,9,11], sig: 1},
+  mix : {suf:'mixolídio',          tag:'modo V',     semis:[0,2,4,5,7,9,10], sig:-1},
+  loc : {suf:'lócrio',             tag:'modo VII',   semis:[0,1,3,5,6,8,10], sig:-5},
+  pmaj: {suf:'pentatônica maior',  tag:'',           semis:[0,2,4,7,9],      lets:[0,1,2,4,5],   sig: 0},
+  pmin: {suf:'pentatônica menor',  tag:'',           semis:[0,3,5,7,10],     lets:[0,2,3,4,6],   sig:-3},
+  bmin: {suf:'blues',              tag:'menor',      semis:[0,3,5,6,7,10],   lets:[0,2,3,4,4,6], sig:-3},
+  bmaj: {suf:'blues maior',        tag:'',           semis:[0,2,3,4,7,9],    lets:[0,1,2,2,4,5], sig: 0},
+};
+const DESC = {
+  maj :'Padrão T–T–St–T–T–T–St. A base de tudo.',
+  nat :'Mesmas notas da relativa maior, começando no 6º grau.',
+  harm:'Menor natural com o 7º grau elevado (sensível). Gera o salto de 1½ tom entre 6º e 7º.',
+  mel :'Na forma clássica: sobe com 6º e 7º elevados, desce como menor natural.',
+  dor :'Menor com 6ª maior. Modo começando no 2º grau da maior.',
+  fri :'Menor com 2ª menor. Modo começando no 3º grau da maior.',
+  lid :'Maior com 4ª aumentada. Modo começando no 4º grau da maior.',
+  mix :'Maior com 7ª menor. Modo começando no 5º grau da maior.',
+  loc :'5ª diminuta. Modo começando no 7º grau da maior.',
+  pmaj:'Maior sem o 4º e o 7º graus (sem semitons).',
+  pmin:'Menor natural sem o 2º e o 6º graus.',
+  bmin:'Pentatônica menor + ♭5 (blue note).',
+  bmaj:'Pentatônica maior + ♭3 (blue note).',
+};
+const ST_NAMES = ['Não iniciada','Aprendendo','Fluente','Dominada'];
+
+function buildScale(t, type){
+  const d = SC[type], lets = d.lets || [0,1,2,3,4,5,6], p0 = pcOf(t);
+  return d.semis.map((s,i) => {
+    const l = (t.l + lets[i]) % 7;
+    let a = ((p0 + s - NAT[l]) % 12 + 12) % 12; if (a > 6) a -= 12;
+    return {l, a};
+  });
+}
+function degLabels(type){
+  const d = SC[type], lets = d.lets || [0,1,2,3,4,5,6];
+  return d.semis.map((s,i) => { const diff = s - MAJREF[lets[i]]; return (diff<0?'♭'.repeat(-diff):diff>0?'♯'.repeat(diff):'') + (lets[i]+1); });
+}
+function stepsFormula(type){
+  const s = SC[type].semis.concat(12), out = [];
+  for (let i=1;i<s.length;i++){ const d=s[i]-s[i-1]; out.push(d===1?'St':d===2?'T':d===3?'1½T':d===4?'2T':d+'st'); }
+  return out;
+}
+/* midi ascendente (com a oitava), respeitando letras: B♯ e C♭ ficam corretos */
+function midiAsc(t, type){
+  const d = SC[type], lets = (d.lets || [0,1,2,3,4,5,6]).concat(7), startOct = t.l <= 3 ? 4 : 3;
+  const notes = buildScale(t, type).concat([{l:t.l, a:t.a}]);
+  return notes.map((n,i) => { const abs = t.l + lets[i]; const oct = startOct + Math.floor(abs/7); return 12*(oct+1) + NAT[n.l] + n.a; });
+}
+function isTheo(t, type){ return Math.abs(fifths(t) + SC[type].sig) > 7; }
+function enharm(t){ // respelling dentro de |armadura|<=7
+  const p = pcOf(t); const cands = [];
+  for (let l=0;l<7;l++) for (let a=-1;a<=1;a++) if (((NAT[l]+a)%12+12)%12===p && !(l===t.l&&a===t.a)) cands.push({l,a});
+  return cands[0];
+}
+
+/* ---- tonalidades no ciclo ---- */
+const POS = [
+  {maj:['C'],        min:['A']},
+  {maj:['G'],        min:['E']},
+  {maj:['D'],        min:['B']},
+  {maj:['A'],        min:['F#']},
+  {maj:['E'],        min:['C#']},
+  {maj:['B','Cb'],   min:['G#','Ab']},
+  {maj:['F#','Gb'],  min:['D#','Eb']},
+  {maj:['Db','C#'],  min:['Bb','A#']},
+  {maj:['Ab'],       min:['F']},
+  {maj:['Eb'],       min:['C']},
+  {maj:['Bb'],       min:['G']},
+  {maj:['F'],        min:['D']},
+];
+const SHARPS = ['F#','C#','G#','D#','A#','E#','B#'].map(N);
+const FLATS  = ['Bb','Eb','Ab','Db','Gb','Cb','Fb'].map(N);
+const sigOf = majStr => fifths(N(majStr));
+function locate(t, q){ // tonalidade (tônica, maior/menor) -> posição no ciclo
+  let s = fifths(t) - (q==='min'?3:0);
+  if (s > 7) s -= 12; if (s < -7) s += 12;
+  for (let p=0;p<12;p++){ const i = POS[p].maj.findIndex(m => sigOf(m)===s); if (i>=0) return {pos:p, alt:i, q}; }
+  return null;
+}
+const hue = p => (p*30 + 8) % 360;
+const kcolor = (p, dark) => `hsl(${hue(p)} ${dark?48:72}% ${dark?52:66}%)`;
+const kcolorMin = (p, dark) => `hsl(${hue(p)} ${dark?32:58}% ${dark?36:80}%)`;
+function posLabel(p, plain){
+  const P = POS[p], f = s => plain ? nmText(N(s),'pt') : nm(N(s),'pt');
+  return P.maj.map(f).join('/') + ' maior · ' + P.min.map(f).join('/') + ' menor';
+}
+
+/* =====================================================================
+   ESTADO / PERSISTÊNCIA
+   ===================================================================== */
+function load(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } }
+function save(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ toast('Sem espaço para salvar — exporte um backup.'); return false; } }
+const DEF_SET = {names:'pt', rotate:true, window:true, progress:true, sel:{pos:0,alt:0,q:'maj'}, groups:{tom:true, campo:true}, metroBpm:80, metroBeats:4};
+const S = {
+  view:'ciclo',
+  settings: Object.assign({}, DEF_SET, load('cq.settings', {})),
+  progress: load('cq.progress', {}),
+  log: load('cq.log', []),
+  notes: load('cq.notes', {}),
+  open: new Set(),
+  images: [],
+  gfilter: 'all',
+  session: null,
+  rot: 0,
+};
+S.sel = Object.assign({pos:0,alt:0,q:'maj'}, S.settings.sel);
+const saveSet = () => save('cq.settings', S.settings);
+const saveProg = () => persist('progress');
+const saveLog = () => persist('log');
+const saveNotes = () => persist('notes');
+function isDark(){ const t = document.documentElement.getAttribute('data-theme'); if (t==='dark') return true; if (t==='light') return false; return matchMedia('(prefers-color-scheme: dark)').matches; }
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const pad2 = n => String(n).padStart(2,'0');
+function today(d){ d = d || new Date(); return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate()); }
+function fmtDate(s){ const [y,m,d] = s.split('-'); return d+'/'+m+'/'+y.slice(2); }
+let toastT;
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('on'),2600); }
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+const esc = s => String(s??'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* =====================================================================
+   ÁUDIO — piano sintetizado + metrônomo
+   ===================================================================== */
+let AC = null, MASTER = null;
+function ac(){
+  if (!AC){
+    AC = new (window.AudioContext || window.webkitAudioContext)();
+    const comp = AC.createDynamicsCompressor(); comp.connect(AC.destination);
+    MASTER = AC.createGain(); MASTER.gain.value = .9; MASTER.connect(comp);
+  }
+  if (AC.state === 'suspended') AC.resume();
+  return AC;
+}
+function pianoNote(m, t, len){
+  const f = 440 * Math.pow(2, (m-69)/12);
+  const g = AC.createGain(), lp = AC.createBiquadFilter();
+  lp.type='lowpass'; lp.frequency.setValueAtTime(Math.min(9000, f*9), t); lp.frequency.exponentialRampToValueAtTime(Math.max(400,f*2), t+len);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.32, t+0.008); g.gain.exponentialRampToValueAtTime(0.12, t+0.25); g.gain.exponentialRampToValueAtTime(0.0001, t+len);
+  lp.connect(g); g.connect(MASTER);
+  [[1,'triangle',1],[2,'sine',.35],[3,'sine',.12],[4,'sine',.05]].forEach(([mult,type,amp]) => {
+    const o = AC.createOscillator(), og = AC.createGain(); o.type=type; o.frequency.value=f*mult; o.detune.value = (mult-1)*1.5;
+    og.gain.value = amp; o.connect(og); og.connect(lp); o.start(t); o.stop(t+len+.05);
+  });
+}
+let playTimers = [];
+function stopPlay(){ playTimers.forEach(clearTimeout); playTimers=[]; $$('.kbd .hit').forEach(e=>e.classList.remove('hit')); $$('.score .colhl.on').forEach(e=>e.classList.remove('on')); }
+function playScale(id, mode, root){
+  ac(); stopPlay();
+  const [ks, type] = id.split('|'); const t = N(ks);
+  const asc = midiAsc(t, type);
+  let seq = asc.slice();
+  if (mode !== 'up'){
+    const dsrc = SC[type].desc ? midiAsc(t, SC[type].desc) : asc;
+    seq = seq.concat(dsrc.slice(0,-1).reverse());
+  }
+  const bpm = (S.progress[id] && S.progress[id].bpm) || 92;
+  const dur = 60 / bpm, t0 = AC.currentTime + .06;
+  seq.forEach((m,i) => {
+    pianoNote(m, t0 + i*dur, Math.max(.6, dur*1.8));
+    playTimers.push(setTimeout(() => {
+      if (!root) return;
+      $$('.kbd .hit', root).forEach(e=>e.classList.remove('hit'));
+      const k = root.querySelector('.kbd [data-m="'+m+'"]'); if (k) k.classList.add('hit');
+    }, (i*dur + .06)*1000));
+  });
+  playTimers.push(setTimeout(() => root && $$('.kbd .hit', root).forEach(e=>e.classList.remove('hit')), (seq.length*dur+.3)*1000));
+}
+
+const Metro = {
+  on:false, next:0, beat:0, timer:null,
+  get bpm(){ return S.settings.metroBpm; }, get beats(){ return S.settings.metroBeats; },
+  start(){ ac(); this.on=true; this.beat=0; this.next=AC.currentTime+.08; this.timer=setInterval(()=>this.tick(),25); this.tick(); renderMetroState(); },
+  stop(){ this.on=false; clearInterval(this.timer); renderMetroState(); },
+  tick(){
+    while (this.next < AC.currentTime + .12){
+      const b = this.beat % this.beats; this.click(this.next, b===0 && this.beats>1);
+      const delay = Math.max(0, (this.next - AC.currentTime)*1000);
+      setTimeout(() => flashBeat(b), delay);
+      this.next += 60/this.bpm; this.beat++;
+    }
+  },
+  click(t, acc){
+    const o = AC.createOscillator(), g = AC.createGain(); o.type='square'; o.frequency.value = acc ? 1760 : 1100;
+    g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(acc?.45:.28,t+.002); g.gain.exponentialRampToValueAtTime(0.0001,t+.045);
+    o.connect(g); g.connect(MASTER); o.start(t); o.stop(t+.06);
+  }
+};
+let taps = [];
+function tempoName(b){ return b<40?'Grave':b<60?'Largo':b<66?'Larghetto':b<76?'Adagio':b<108?'Andante':b<120?'Moderato':b<156?'Allegro':b<176?'Vivace':b<200?'Presto':'Prestissimo'; }
+function renderMetro(){
+  const m = $('#metro');
+  m.innerHTML = `
+    <div class="row" style="justify-content:space-between;margin-bottom:6px"><b style="font-family:var(--serif);font-size:18px">Metrônomo</b><button class="btn sm ghost" data-act="metro-panel">✕</button></div>
+    <div class="bpm"><span id="mbpm">${Metro.bpm}</span> <small>bpm</small></div>
+    <div class="tempo-name" id="mtname">${tempoName(Metro.bpm)}</div>
+    <input type="range" min="30" max="240" value="${Metro.bpm}" id="mrange" aria-label="BPM">
+    <div class="mrow">
+      <button class="btn sm" data-act="metro-step" data-d="-5">−5</button><button class="btn sm" data-act="metro-step" data-d="-1">−1</button>
+      <button class="btn sm" data-act="metro-step" data-d="1">+1</button><button class="btn sm" data-act="metro-step" data-d="5">+5</button>
+      <button class="btn sm" data-act="metro-tap">Tap</button>
+    </div>
+    <div class="beats" id="mbeats">${Array.from({length:Metro.beats},(_,i)=>`<span class="${i===0&&Metro.beats>1?'first':''}"></span>`).join('')}</div>
+    <div class="mrow">
+      <label class="muted" style="font-size:13px;font-weight:600;display:flex;gap:6px;align-items:center">Compasso
+        <select class="inp" id="mbeatsel" style="min-height:34px;padding:4px 8px">${[1,2,3,4,5,6,7,8,9,12].map(n=>`<option ${n===Metro.beats?'selected':''}>${n}</option>`).join('')}</select></label>
+      <button class="btn ${Metro.on?'':'pri'}" data-act="metro-run" style="min-width:110px;justify-content:center">${Metro.on?'■ Parar':'▶ Iniciar'}</button>
+    </div>`;
+}
+function setBpm(b){ b = Math.max(30, Math.min(240, Math.round(b))); S.settings.metroBpm=b; saveSet(); const e=$('#mbpm'); if(e){ e.textContent=b; $('#mrange').value=b; $('#mtname').textContent=tempoName(b);} $('#fabbpm').textContent=b; }
+function renderMetroState(){ $('#metrofab').classList.toggle('run', Metro.on); const b=$('[data-act="metro-run"]'); if(b){ b.textContent = Metro.on?'■ Parar':'▶ Iniciar'; b.classList.toggle('pri',!Metro.on);} }
+function flashBeat(b){ const sp=$$('#mbeats span'); sp.forEach((s,i)=>s.classList.toggle('a',i===b)); const d=$('#metrofab .dot'); d.style.transform='scale(1.6)'; setTimeout(()=>d.style.transform='',90); }
+
+/* =====================================================================
+   CICLO (SVG)
+   ===================================================================== */
+const P2 = (r, a) => [ +(r*Math.sin(a*Math.PI/180)).toFixed(2), +(-r*Math.cos(a*Math.PI/180)).toFixed(2) ];
+function arc(r0, r1, a0, a1){
+  const [x0,y0]=P2(r1,a0),[x1,y1]=P2(r1,a1),[x2,y2]=P2(r0,a1),[x3,y3]=P2(r0,a0), big = (a1-a0)>180?1:0;
+  return `M${x0},${y0}A${r1},${r1} 0 ${big} 1 ${x1},${y1}L${x2},${y2}A${r0},${r0} 0 ${big} 0 ${x3},${y3}Z`;
+}
+function upText(x, y, cls, size, txt, attrs='', style='', ox, oy){
+  ox = ox ?? x; oy = oy ?? y;
+  return `<text class="up ${cls}" x="${x}" y="${y}" font-size="${size}" text-anchor="middle" dominant-baseline="central" style="transform-origin:${ox}px ${oy}px;${style}" ${attrs}>${txt}</text>`;
+}
+function wheelName(s, q){ const n=N(s); let t = PT[n.l]; if (q==='min') t = t.toLowerCase(); return t + (n.a ? `<tspan font-family="Inter,sans-serif" font-weight="500">${ACC_SYM[n.a]}</tspan>` : ''); }
+function posScore(p){
+  const P=POS[p], ids=[P.maj[0]+'|maj', P.min[0]+'|nat', P.min[0]+'|harm', P.min[0]+'|mel'];
+  return ids.reduce((a,id)=>a+((S.progress[id]&&S.progress[id].s)||0),0) / (ids.length*3);
+}
+function renderWheel(){
+  const dark = isDark(), sel = S.sel; let h = '<g id="rot">';
+  const R = {mi0:100, mi1:160, ma0:160, ma1:236};
+  for (let p=0;p<12;p++){
+    const a = p*30, a0=a-15, a1=a+15, P = POS[p];
+    h += `<path class="sector ${sel.pos===p&&sel.q==='maj'?'sel':''}" d="${arc(R.ma0,R.ma1,a0,a1)}" fill="${kcolor(p,dark)}" data-act="sel" data-pos="${p}" data-q="maj"/>`;
+    h += `<path class="sector ${sel.pos===p&&sel.q==='min'?'sel':''}" d="${arc(R.mi0,R.mi1,a0,a1)}" fill="${kcolorMin(p,dark)}" data-act="sel" data-pos="${p}" data-q="min"/>`;
+    const fillTxt = dark ? '#fff8ee' : '#231c14';
+    // nomes maiores
+    if (P.maj.length > 1){
+      const [x,y]=P2(202,a);
+      h += upText(x,y-6,'wtxt',23,wheelName(P.maj[0],'maj'),'font-weight="700"',`fill:${fillTxt}`,x,y);
+      h += upText(x,y+16,'wtxt small',12.5,wheelName(P.maj[1],'maj'),'',`fill:${fillTxt};opacity:.75`,x,y);
+    } else { const [x,y]=P2(200,a); h += upText(x,y,'wtxt',26,wheelName(P.maj[0],'maj'),'font-weight="700"',`fill:${fillTxt}`); }
+    // nomes menores
+    if (P.min.length > 1){
+      const [x,y]=P2(131,a);
+      h += upText(x,y-6,'wtxt',16,wheelName(P.min[0],'min'),'font-weight="600"',`fill:${fillTxt}`,x,y);
+      h += upText(x,y+10,'wtxt small',10.5,wheelName(P.min[1],'min'),'',`fill:${fillTxt};opacity:.75`,x,y);
+    } else { const [x,y]=P2(130,a); h += upText(x,y,'wtxt',17,wheelName(P.min[0],'min'),'font-weight="600"',`fill:${fillTxt}`); }
+    // armadura
+    const sigs = P.maj.map(sigOf).map(s => s===0?'0':s>0?s+'♯':(-s)+'♭').join(' / ');
+    const [sx,sy]=P2(255,a); h += upText(sx,sy,'wsig',11.5,sigs);
+    // progresso
+    if (S.settings.progress){
+      const sc = posScore(p);
+      h += `<path class="wprog" d="M${P2(242,a0+3).join(',')}A242,242 0 0 1 ${P2(242,a1-3).join(',')}" stroke="var(--line)"/>`;
+      if (sc>0) h += `<path class="wprog" d="M${P2(242,a0+3).join(',')}A242,242 0 0 1 ${P2(242,a0+3+24*sc).join(',')}" stroke="${sc>=1?'var(--s3)':sc>=.5?'var(--s2)':'var(--s1)'}"/>`;
+    }
+  }
+  // janela diatônica
+  if (S.settings.window){
+    const a = sel.pos*30;
+    h += `<path class="wwin" d="${arc(R.mi0-2,R.ma1+1,a-45,a+45)}"/>`;
+    const nums = sel.q==='maj' ? {maj:['IV','I','V'], min:['ii','vi','iii']} : {maj:['VI','III','VII'], min:['iv','i','v']};
+    [-1,0,1].forEach((d,i) => {
+      const aa = (sel.pos+d)*30;
+      const [x,y]=P2(226,aa); h += upText(x,y,'wnum',12,nums.maj[i]);
+      const [x2,y2]=P2(109,aa); h += upText(x2,y2,'wnum',10.5,nums.min[i]);
+    });
+  }
+  h += '</g>';
+  // centro
+  const P = POS[sel.pos], ms = P.maj[sel.alt]||P.maj[0], mn = P.min[sel.alt]||P.min[0];
+  const s = sigOf(ms);
+  const main = sel.q==='maj' ? nmText(N(ms),'pt')+' maior' : nmText(N(mn),'pt')+' menor';
+  const sub  = sel.q==='maj' ? 'relativa: '+nmText(N(mn),'pt')+' menor' : 'relativa: '+nmText(N(ms),'pt')+' maior';
+  h += `<g class="wcenter"><circle r="96" fill="var(--card)" stroke="var(--line)"/>
+    <circle r="88" fill="none" stroke="${kcolor(sel.pos,dark)}" stroke-width="4" opacity=".9"/>
+    <text y="-26" text-anchor="middle" font-family="var(--sans)" font-size="10.5" font-weight="700" letter-spacing="1.5" fill="var(--muted)">TONALIDADE</text>
+    <text y="4" text-anchor="middle" font-family="var(--serif)" font-size="${main.length>11?20:24}" font-weight="700" fill="var(--ink)">${esc(main)}</text>
+    <text y="27" text-anchor="middle" font-family="var(--sans)" font-size="11.5" fill="var(--muted)">${esc(sub)}</text>
+    <text y="46" text-anchor="middle" font-family="var(--sans)" font-size="12" font-weight="700" fill="var(--accent)">${s===0?'sem acidentes':Math.abs(s)+(s>0?' sustenido':' bemol')+(Math.abs(s)>1?(s>0?'s':'is'):'')}</text>
+  </g>`;
+  const svg = $('#wheel'); svg.innerHTML = h;
+  // rotação: caminho mais curto
+  if (S.settings.rotate){ const target = -sel.pos*30; const diff = ((target - S.rot) % 360 + 540) % 360 - 180; S.rot += diff; } else S.rot = 0;
+  svg.style.setProperty('--rot', S.rot+'deg');
+  // ferramentas
+  $('#wheeltools').innerHTML = [['rotate','Girar ao topo'],['window','Janela diatônica'],['progress','Progresso']]
+    .map(([k,l]) => `<button class="tog ${S.settings[k]?'on':''}" data-act="wtog" data-k="${k}">${l}</button>`).join('');
+  // mini-ícone
+  let b=''; for (let p=0;p<12;p++) b += `<path d="${arc(7,19,p*30-15,p*30+15)}" fill="${kcolor(p,dark)}" stroke="var(--card)" stroke-width=".8"/>`;
+  $('#brandwheel').innerHTML = b;
+}
+function renderKeystrip(){
+  const cur = (POS[S.sel.pos].maj[S.sel.alt]||POS[S.sel.pos].maj[0]);
+  const btn = s => { const L = locate(N(s),'maj'); return `<button class="kchip ${cur===s&&S.sel.q==='maj'?'on':''}" data-act="sel" data-pos="${L.pos}" data-alt="${L.alt}" data-q="maj">${nm(N(s),'pt')}</button>`; };
+  $('#keystrip').innerHTML = `
+    <span class="lab">Natural</span><div class="row">${btn('C')}</div>
+    <span class="lab">Sustenidos</span><div class="row">${['G','D','A','E','B','F#','C#'].map(btn).join('')}</div>
+    <span class="lab">Bemóis</span><div class="row">${['F','Bb','Eb','Ab','Db','Gb','Cb'].map(btn).join('')}</div>`;
+}
+
+/* =====================================================================
+   PAUTA COM ARMADURA
+   ===================================================================== */
+function staffSVG(sig){
+  const n = Math.abs(sig), sharp = sig > 0, sp = 10, W = 300, dx = 20;
+  const TS=[8,5,9,6,3,7,4], TF=[4,7,3,6,2,5,1];
+  const staves = [{bot:78, lab:'CLAVE DE SOL', off:0},{bot:170, lab:'CLAVE DE FÁ', off:-2}];
+  let h = `<svg class="staff" viewBox="0 0 ${W} 182" aria-label="Armadura de clave">`;
+  staves.forEach(st => {
+    for (let i=0;i<5;i++){ const y = st.bot - i*sp; h += `<line x1="6" x2="${W-6}" y1="${y}" y2="${y}"/>`; }
+    h += `<line x1="6" x2="6" y1="${st.bot-40}" y2="${st.bot}"/><line x1="${W-6}" x2="${W-6}" y1="${st.bot-40}" y2="${st.bot}"/>`;
+    h += `<text x="6" y="${st.bot-62}">${st.lab}</text>`;
+    for (let i=0;i<n;i++){
+      const pos = (sharp?TS:TF)[i] + st.off, y = st.bot - pos*sp/2, x = 30 + i*dx;
+      h += sharp
+        ? `<g class="sacc" transform="translate(${x},${y})"><path d="M-2.4,-10.5V9.5M2.4,-9.5V10.5" stroke-width="1.4"/><path d="M-5.5,-1.8L5.5,-5.2M-5.5,5.2L5.5,1.8" stroke-width="3"/></g>`
+        : `<g class="sacc" transform="translate(${x},${y})"><path d="M-3,-15V5" stroke-width="1.5"/><path d="M-3,4.6C3,1.6 6,-2.6 3.4,-4.4C1.4,-5.6 -1.6,-4 -3,-2" stroke-width="2.1"/></g>`;
+    }
+  });
+  return h + '</svg>';
+}
+
+/* =====================================================================
+   TECLADO
+   ===================================================================== */
+const isBlack = m => [1,3,6,8,10].includes(((m%12)+12)%12);
+function keyboardSVG(midis, labels){
+  const lo = Math.floor(Math.min(...midis)/12)*12; let hi = Math.max(Math.max(...midis), lo+23); while (isBlack(hi)) hi++;
+  const whites = []; for (let m=lo;m<=hi;m++) if (!isBlack(m)) whites.push(m);
+  const W=26, H=112, BW=16, BH=70, on = new Map(); midis.forEach((m,i)=>{ if(!on.has(m)) on.set(m, labels[i]); });
+  const tonic = midis[0];
+  let w = '', b = '';
+  whites.forEach((m,i) => {
+    const x = i*W, lab = on.get(m), cls = 'w' + (on.has(m)?' on':'') + ((m-tonic)%12===0&&on.has(m)?' ton':'');
+    w += `<rect class="${cls}" data-m="${m}" x="${x+.5}" y=".5" width="${W-1}" height="${H}" rx="4"/>`;
+    if (lab) w += `<text class="lw" x="${x+W/2}" y="${H-12}" text-anchor="middle">${lab}</text>`;
+    if (m===60) w += `<circle class="mc" cx="${x+W/2}" cy="${H+7}" r="2.4"><title>Dó central</title></circle>`;
+  });
+  whites.forEach((m,i) => {
+    const bm = m+1; if (!isBlack(bm) || bm>hi) return;
+    const x = (i+1)*W - BW/2, lab = on.get(bm), cls='b'+(on.has(bm)?' on':'')+((bm-tonic)%12===0&&on.has(bm)?' ton':'');
+    b += `<rect class="${cls}" data-m="${bm}" x="${x}" y=".5" width="${BW}" height="${BH}" rx="3"/>`;
+    if (lab) b += `<text class="lbk" x="${x+BW/2}" y="${BH-10}" text-anchor="middle" font-size="9">${lab}</text>`;
+  });
+  return `<svg class="kbd" viewBox="0 0 ${whites.length*W+1} ${H+12}">${w}${b}</svg>`;
+}
+
+/* =====================================================================
+   DEDILHADOS — escalas maiores, 1 oitava (subindo)
+   ===================================================================== */
+const FING = {};
+['C','G','D','A','E'].forEach(k => FING[k]=['12312345','54321321']);
+FING.B = FING.Cb = ['12312345','43214321'];
+FING['F#'] = FING.Gb = ['23412312','43213214'];
+FING['C#'] = FING.Db = ['23123412','32143213'];
+FING.Ab = ['34123123','32143213'];
+FING.Eb = ['31234123','32143213'];
+FING.Bb = ['41231234','32143213'];
+FING.F  = ['12341234','54321321'];
+
+/* =====================================================================
+   CARTÃO DE ESCALA
+   ===================================================================== */
+function chipsRow(notes, degs, opts={}){
+  return notes.map((n,i) => {
+    const d = degs[i] || '';
+    const ch = opts.mask && opts.mask[i];
+    const cls = 'chip' + ((i===0 || i===notes.length-1) && opts.tonicEdges ? ' t' : '') + (ch ? ' alt' : '');
+    return `<span class="${cls}"${ch?' title="nota característica"':''}><b>${nm(n)}</b><i>${d}</i></span>`;
+  }).join('');
+}
+function scaleCard(ts, type, opts={}){
+  const t = N(ts), d = SC[type], id = kStr(t)+'|'+type, pr = S.progress[id] || {}, st = pr.s||0;
+  const notes = buildScale(t, type), degs = degLabels(type);
+  const asc = notes.concat([{...t}]), adeg = degs.concat(['8']);
+  const open = opts.forceOpen || S.open.has(id), kc = opts.kc || kcolor(locate(t, ['maj','lid','mix','pmaj','bmaj'].includes(type)?'maj':'min')?.pos ?? 0, isDark());
+  const theo = isTheo(t, type) && ['maj','nat','harm','mel'].includes(type);
+  // nota característica: o que difere da escala-mãe (maior ou menor natural)
+  const NATREF = [0,2,3,5,7,8,10], lets0 = d.lets || [0,1,2,3,4,5,6];
+  const famRef = ['harm','mel','dor','fri','loc','bmin'].includes(type) ? NATREF : ['lid','mix','bmaj'].includes(type) ? MAJREF : null;
+  const mask = famRef ? d.semis.map((sm,i)=> sm !== famRef[lets0[i]]).concat([false]) : null;
+  let notesH = '';
+  if (d.desc){
+    const dn = buildScale(t, d.desc), dd = degLabels(d.desc);
+    const descN = [{...t}].concat(dn.slice().reverse()), descD = ['8'].concat(dd.slice().reverse());
+    notesH = `<div class="notes"><span class="dir">sobe</span>${chipsRow(asc, adeg, {tonicEdges:true, mask})}</div>
+              <div class="notes"><span class="dir">desce</span>${chipsRow(descN, descD, {tonicEdges:true})}</div>`;
+    notesH = `<div class="nrows">${notesH}</div>`;
+  } else notesH = `<div class="notes">${chipsRow(asc, adeg, {tonicEdges:true, mask})}</div>`;
+  const title = `${nm(t)} ${d.suf}`;
+  const tagH = (opts.tag||d.tag) ? ` <span class="tag">${opts.tag||d.tag}</span>` : '';
+  const sub = opts.sub ? `<small>${opts.sub}</small>` : '';
+  let body = '';
+  if (open){
+    const midis = midiAsc(t, type);
+    const formula = stepsFormula(type).join(' – ');
+    const fg = type==='maj' && FING[kStr(t)];
+    let fingH = '';
+    if (fg){
+      fingH = `<div class="fact" style="overflow-x:auto"><div class="k">Dedilhado padrão · 1 oitava subindo (descendo, leia ao contrário)</div>
+        <table class="fing"><tr><th></th>${asc.map(n=>`<td class="n">${nm(n,'en')}</td>`).join('')}</tr>
+        <tr><th>Mão direita</th>${fg[0].split('').map(f=>`<td class="f">${f}</td>`).join('')}</tr>
+        <tr><th>Mão esquerda</th>${fg[1].split('').map(f=>`<td class="f">${f}</td>`).join('')}</tr></table></div>`;
+    }
+    const en = theo ? enharm(t) : null;
+    body = `<div class="sbody">
+      ${theo ? `<div class="fact" style="background:var(--accent-soft)"><div class="k">Tonalidade teórica</div>Exigiria mais de 7 acidentes na armadura. Na prática, usa-se a enharmônica <b>${nm(en)} ${d.suf}</b>.</div>`:''}
+      ${keyboardSVG(midis, adeg)}
+      <div class="facts">
+        <div class="fact"><div class="k">Fórmula (tons e semitons)</div>${formula}</div>
+        <div class="fact"><div class="k">Graus</div>${adeg.join(' · ')}</div>
+        <div class="fact"><div class="k">Em cifra</div>${asc.map(cifra).join(' ')}</div>
+        <div class="fact"><div class="k">Sobre</div>${DESC[type]||''}</div>
+      </div>
+      ${fingH}
+      <div class="ctrl">
+        <button class="btn pri" data-act="play" data-id="${id}" data-mode="updown">▶ Sobe e desce</button>
+        <button class="btn" data-act="play" data-id="${id}" data-mode="up">▶ Só subir</button>
+        <button class="btn" data-act="stop">■</button>
+        <label>BPM que já toco <input type="number" min="20" max="320" step="1" value="${pr.bpm||''}" placeholder="—" data-bpm="${id}"></label>
+      </div>
+      <div class="ctrl">
+        <div class="seg">${ST_NAMES.map((s,i)=>`<button class="${st===i?'on s'+i:''}" data-act="status" data-id="${id}" data-s="${i}">${s}</button>`).join('')}</div>
+        <button class="btn sm" data-act="trained" data-id="${id}">✓ Treinei hoje</button>
+        <span class="muted" style="font-size:12.5px">${pr.t ? 'último treino: '+fmtDate(pr.t) : 'ainda sem treino registrado'}</span>
+      </div>
+    </div>`;
+  }
+  return `<div class="scale ${open?'open':''} ${S.settings.names==='ext'?'ext':''}" data-sid="${id}" style="--kc:${kc}">
+    <div class="shead" data-act="toggle-scale" data-id="${id}">
+      <div class="sname">${title}${tagH}${theo?' <span class="tag warn">teórica</span>':''}${sub}</div>
+      ${notesH}
+      <div class="sact">
+        <button class="ibtn" data-act="play" data-id="${id}" data-mode="updown" title="Ouvir">▶</button>
+        <button class="ibtn eye" data-act="score" data-id="${id}" title="Partitura e dedilhado (1, 2 e 3 oitavas e arpejo)" aria-label="Partitura"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 12S5.5 5 12 5s10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        <button class="stbtn s${st}" data-act="cycle" data-id="${id}" title="Estágio: ${ST_NAMES[st]} (toque para avançar)"><span></span><span></span><span></span></button>
+      </div>
+    </div>${body}</div>`;
+}
+
+/* ---- campo harmônico ---- */
+const TRI = {'4,7':['maj',''],'3,7':['min','m'],'3,6':['dim','°'],'4,8':['aug','+']};
+function tetSym(q, s7){
+  if (q==='maj') return s7===11?'7M':'7';
+  if (q==='min') return s7===10?'m7':'m(7M)';
+  if (q==='dim') return s7===10?'m7(♭5)':'°7';
+  if (q==='aug') return s7===11?'7M(♯5)':'7(♯5)';
+}
+function fieldHTML(ts, type, title){
+  const t = N(ts), sc = buildScale(t, type), R = ['I','II','III','IV','V','VI','VII'];
+  const iv = (a,b) => (pcOf(b)-pcOf(a)+12)%12;
+  const cols = sc.map((r,i) => {
+    const th = sc[(i+2)%7], fi = sc[(i+4)%7], se = sc[(i+6)%7];
+    const [q, sym] = TRI[iv(r,th)+','+iv(r,fi)] || ['?','?'];
+    let rn = (q==='min'||q==='dim') ? R[i].toLowerCase() : R[i];
+    if (q==='dim') rn += '°'; if (q==='aug') rn += '+';
+    const ts7 = tetSym(q, iv(r,se));
+    return {rn, r:kStr(r), sym, ts7, tri: cifra(r)+sym, tet: cifra(r)+ts7};
+  });
+  const ctx = rn => esc(`${rn} grau de ${nmText(t)} ${SC[type].suf}`);
+  return `<h4>${title}</h4><table><tr><th>Grau</th>${cols.map(c=>`<td class="rn">${c.rn}</td>`).join('')}</tr>
+    <tr><th>Tríade</th>${cols.map(c=>`<td class="ch" tabindex="0" data-act="chord" data-root="${c.r}" data-sym="${esc(c.sym)}" data-ctx="${ctx(c.rn)}" title="Ver variações e inversões">${c.tri}</td>`).join('')}</tr>
+    <tr><th>Tétrade</th>${cols.map(c=>`<td class="ch" tabindex="0" data-act="chord" data-root="${c.r}" data-sym="${esc(c.ts7)}" data-ctx="${ctx(c.rn)}" title="Ver variações e inversões">${c.tet}</td>`).join('')}</tr></table>`;
+}
+
+/* =====================================================================
+   DETALHE DA TONALIDADE
+   ===================================================================== */
+function sec(key, title, hint, inner){
+  const open = !!S.settings.groups[key];
+  return `<details class="card sec" data-g="${key}" ${open?'open':''}><summary><h3>${title}</h3><span class="hint">${hint}</span><span class="chev">▾</span></summary><div class="secbody">${inner}</div></details>`;
+}
+function renderDetail(){
+  const {pos, alt, q} = S.sel, P = POS[pos], dark = isDark();
+  const ms = P.maj[alt]||P.maj[0], mn = P.min[alt]||P.min[0], M = N(ms), m = N(mn), sig = sigOf(ms), kc = kcolor(pos, dark);
+  const focusT = q==='maj' ? M : m;
+  const accs = (sig>0?SHARPS:FLATS).slice(0,Math.abs(sig));
+  const sigTxt = sig===0 ? 'Sem sustenidos nem bemóis' : `${Math.abs(sig)} ${sig>0?(Math.abs(sig)>1?'sustenidos':'sustenido'):(Math.abs(sig)>1?'bemóis':'bemol')}: ${accs.map(n=>nm(n)).join(', ')}`;
+  const title = q==='maj' ? `${nm(M)} maior` : `${nm(m)} menor`;
+  const rel = q==='maj' ? `relativa: ${nm(m)} menor` : `relativa: ${nm(M)} maior`;
+  // vizinhos
+  const nb = [];
+  const dom = (pos+1)%12, sub = (pos+11)%12;
+  const pick = (p, qq) => { const PP=POS[p]; return qq==='maj' ? PP.maj[0] : PP.min[0]; };
+  nb.push(`<button class="pill" data-act="sel" data-pos="${dom}" data-q="${q}" data-alt="0">Dominante (V): <b>${nm(N(pick(dom,q)))} ${q==='maj'?'maior':'menor'}</b></button>`);
+  nb.push(`<button class="pill" data-act="sel" data-pos="${sub}" data-q="${q}" data-alt="0">Subdominante (IV): <b>${nm(N(pick(sub,q)))} ${q==='maj'?'maior':'menor'}</b></button>`);
+  nb.push(`<button class="pill" data-act="sel" data-pos="${pos}" data-alt="${alt}" data-q="${q==='maj'?'min':'maj'}">Relativa: <b>${q==='maj'?nm(m)+' menor':nm(M)+' maior'}</b></button>`);
+  const hq = q==='maj'?'min':'maj', H = locate(focusT, hq);
+  if (H){ const HP = POS[H.pos]; const hs = hq==='maj'?(HP.maj[H.alt]||HP.maj[0]):(HP.min[H.alt]||HP.min[0]); const same = pcOf(N(hs))===pcOf(focusT) && N(hs).l===focusT.l;
+    nb.push(`<button class="pill" data-act="sel" data-pos="${H.pos}" data-alt="${H.alt}" data-q="${hq}">Homônima: <b>${nm(N(hs))} ${hq==='maj'?'maior':'menor'}</b>${same?'':' <span class="tag">enarm.</span>'}</button>`); }
+  if (P.maj.length > 1) nb.push(`<button class="pill" data-act="alt" style="border-color:var(--accent)">⇄ Ver como <b>${q==='maj'?nm(N(P.maj[1-alt]))+' maior':nm(N(P.min[1-alt]))+' menor'}</b></button>`);
+
+  // escalas da tonalidade
+  const tomList = q==='maj'
+    ? [[ms,'maj'],[mn,'nat',{tag:'relativa'}],[mn,'harm',{tag:'relativa'}],[mn,'mel',{tag:'relativa'}]]
+    : [[mn,'nat'],[mn,'harm'],[mn,'mel'],[ms,'maj',{tag:'relativa'}]];
+  const tomH = tomList.map(([s,ty,o]) => scaleCard(s, ty, Object.assign({kc}, o||{}))).join('');
+  // modos
+  const majNotes = buildScale(M, 'maj'), modeT = ['maj','dor','fri','lid','mix','nat','loc'];
+  const modeH = majNotes.map((n,i) => scaleCard(kStr(n), modeT[i], {kc, tag: ['Jônio · I','Dórico · II','Frígio · III','Lídio · IV','Mixolídio · V','Eólio · VI','Lócrio · VII'][i]})).join('');
+  // pentatônicas
+  const pentH = [[ms,'pmaj'],[mn,'pmin'],[mn,'bmin'],[ms,'bmaj']].map(([s,ty])=>scaleCard(s,ty,{kc})).join('');
+  // homônimas
+  const fs = kStr(focusT);
+  const homTypes = q==='maj' ? ['nat','harm','mel','dor','fri','lid','mix','loc'] : ['maj','dor','fri','lid','mix','loc'];
+  const homH = homTypes.map(ty => scaleCard(fs, ty, {kc})).join('');
+  // imagens e notas
+  const imgs = S.images.filter(im => im.key === String(pos));
+
+  $('#detail').innerHTML = `
+    <div class="card dhead" style="--kc:${kc}">
+      <div class="dtitle"><h2>${title}</h2><span class="rel">${rel}</span></div>
+      <div class="dhead-grid">
+        <div>
+          <div class="dsig">${sigTxt}</div>
+          <div class="row" style="margin-top:14px">
+            <button class="btn sm pri" data-act="sess-here">▶ Praticar esta tonalidade</button>
+            <button class="btn sm" data-act="file-btn">Adicionar imagem</button>
+            <span class="muted" style="font-size:12.5px">ou <span class="kbdk">Ctrl</span>+<span class="kbdk">V</span> para colar um print aqui</span>
+          </div>
+        </div>
+        ${staffSVG(sig)}
+      </div>
+      <div class="nbrs">${nb.join('')}</div>
+    </div>
+    ${sec('tom', 'Escalas da tonalidade', 'mesma armadura · <span class="chip alt" style="min-width:0;padding:0 6px;display:inline-block;font-size:11px">tracejado</span> = nota característica', tomH)}
+    ${sec('campo', 'Campo harmônico', 'toque num acorde para ver variações e inversões', `<div class="field">${fieldHTML(ms,'maj',nmText(M)+' maior')}${fieldHTML(mn,'harm',nmText(m)+' menor harmônica')}${fieldHTML(mn,'nat',nmText(m)+' menor natural <span class="muted" style="font-family:var(--sans);font-size:12px;font-weight:500">(mesmos acordes da relativa maior)</span>')}</div>`)}
+    ${sec('modos', 'Modos gregos', `as 7 notas de ${nmText(M)} maior, começando em cada grau`, modeH)}
+    ${sec('penta', 'Pentatônicas e blues', 'para improviso e aquecimento', pentH)}
+    ${sec('hom', `Mesma tônica: ${nmText(focusT)}`, 'homônimas e modos paralelos', homH)}
+    ${sec('prints', `Prints e anotações <span class="tag">${imgs.length}</span>`, 'Ctrl+V com esta tonalidade aberta salva aqui', `
+      ${imgs.length ? `<div class="thumbs">${imgs.map(im=>`<button class="thumb" data-act="img-open" data-id="${im.id}" title="${esc(im.caption)}"><img src="${imgSrc(im)}" alt="${esc(im.caption)}" loading="lazy"></button>`).join('')}</div>`
+        : `<div class="drop">Nenhuma imagem ainda. Tire um print (partitura, exercício, dedilhado…) e aperte <kbd>Ctrl</kbd>+<kbd>V</kbd>.</div>`}
+      <label class="muted" style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Anotações desta tonalidade</label>
+      <textarea class="notes-area" data-notes="${pos}" placeholder="Dificuldades, metas de BPM, passagem do polegar...">${esc(S.notes[pos]||'')}</textarea>`)}
+  `;
+}
+
+/* =====================================================================
+   PRÁTICA
+   ===================================================================== */
+function renderStats(){
+  const byDay = {}; S.log.forEach(e => byDay[e.date] = (byDay[e.date]||0) + (+e.min||0));
+  const td = today(); let week = 0, streak = 0;
+  for (let i=0;i<7;i++){ const d=new Date(); d.setDate(d.getDate()-i); week += byDay[today(d)]||0; }
+  let d0 = new Date(); if (!byDay[td]) d0.setDate(d0.getDate()-1);
+  while (byDay[today(d0)]) { streak++; d0.setDate(d0.getDate()-1); }
+  const days = []; for (let i=13;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); days.push({k:today(d), d}); }
+  const mx = Math.max(10, ...days.map(x=>byDay[x.k]||0));
+  const all = Object.values(S.progress), dom = all.filter(p=>p.s===3).length, flu = all.filter(p=>p.s===2).length;
+  $('#p-stats').innerHTML = `
+    <h3 style="font-size:21px;margin-bottom:12px">Seu estudo</h3>
+    <div class="stats">
+      <div class="stat"><b>${byDay[td]||0}</b><span>min hoje</span></div>
+      <div class="stat"><b>${week}</b><span>min em 7 dias</span></div>
+      <div class="stat"><b>${streak}</b><span>dias seguidos</span></div>
+    </div>
+    <div class="bars">${days.map(x=>{const v=byDay[x.k]||0;return `<div class="${v?'':'z'}" style="height:${Math.max(3,v/mx*100)}%" title="${fmtDate(x.k)}: ${v} min"></div>`;}).join('')}</div>
+    <div class="barlab">${days.map(x=>`<span>${x.d.getDate()}</span>`).join('')}</div>
+    <p class="muted" style="font-size:13.5px;margin:12px 0 0">${dom} escalas dominadas · ${flu} fluentes · ${S.log.length} sessões registradas</p>`;
+}
+const SESS_TYPES = [['maj','Maior'],['nat','Menor natural'],['harm','Menor harmônica'],['mel','Menor melódica'],['pmaj','Pentatônica maior'],['pmin','Pentatônica menor']];
+const isMinT = ty => ['nat','harm','mel','pmin','bmin'].includes(ty);
+function sessTonic(pos, ty){ return isMinT(ty) ? POS[pos].min[0] : POS[pos].maj[0]; }
+function renderSess(){
+  const se = S.session, el = $('#p-sess');
+  if (!se){
+    el.innerHTML = `<h3 style="font-size:21px;margin-bottom:6px">Sessão de prática</h3>
+      <p class="muted" style="margin:0 0 14px;font-size:14px">Percorra o ciclo tonalidade por tonalidade, ou deixe o sorteio escolher (ele favorece o que você domina menos).</p>
+      <div class="form">
+        <label>Escala<select id="sx-type">${SESS_TYPES.map(([k,l])=>`<option value="${k}">${l}</option>`).join('')}</select></label>
+        <label>Começar em<select id="sx-pos">${POS.map((P,i)=>`<option value="${i}" ${i===S.sel.pos?'selected':''}>${posLabel(i,true)}</option>`).join('')}</select></label>
+        <label>Direção<select id="sx-dir"><option value="1">Horário · quintas (♯)</option><option value="-1">Anti-horário · quartas (♭)</option></select></label>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn pri" data-act="sess-start">▶ Percorrer o ciclo</button>
+        <button class="btn" data-act="sortear">🎲 Sortear escala</button>
+      </div>`;
+    return;
+  }
+  const ts = sessTonic(se.pos, se.type), t = N(ts), d = SC[se.type];
+  el.innerHTML = `
+    <div class="sessbig">
+      <div><div class="muted" style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">${se.random?'Sorteio':'Ciclo '+(se.dir>0?'horário (quintas)':'anti-horário (quartas)')} · ${se.visited.length} tonalidade${se.visited.length>1?'s':''}</div>
+      <h2>${nm(t)} ${d.suf}</h2></div>
+      <div class="timer" id="sess-timer">00:00</div>
+    </div>
+    <div style="margin-top:12px">${scaleCard(ts, se.type, {forceOpen:true, kc:kcolor(se.pos,isDark())})}</div>
+    <div class="row" style="margin-top:12px">
+      ${se.random ? `<button class="btn pri" data-act="sortear">🎲 Sortear outra</button>` : `<button class="btn" data-act="sess-step" data-d="-1">‹ Anterior</button><button class="btn pri" data-act="sess-step" data-d="1">Próxima tonalidade ›</button>`}
+      <select class="inp" id="sx-type2">${SESS_TYPES.map(([k,l])=>`<option value="${k}" ${k===se.type?'selected':''}>${l}</option>`).join('')}</select>
+      <button class="btn" data-act="sess-end" style="margin-left:auto">✓ Encerrar e registrar</button>
+      <button class="btn ghost" data-act="sess-cancel">Descartar</button>
+    </div>`;
+  tickTimer();
+}
+function tickTimer(){ const e=$('#sess-timer'); if(!e||!S.session) return; const s=Math.floor((Date.now()-S.session.start)/1000); e.textContent = pad2(Math.floor(s/60))+':'+pad2(s%60); }
+setInterval(tickTimer, 1000);
+function renderMatrix(){
+  const cols = [['maj','Maior'],['nat','Natural'],['harm','Harmônica'],['mel','Melódica']];
+  $('#p-matrix').innerHTML = `<table><tr><th style="text-align:left">Tonalidade</th>${cols.map(c=>`<th>${c[1]}</th>`).join('')}</tr>
+    ${POS.map((P,p)=>`<tr><td class="k"><button data-act="sel-go" data-pos="${p}">${nm(N(P.maj[0]),'pt')} · <span style="color:var(--muted)">${nm(N(P.min[0]),'pt').toLowerCase()}</span></button></td>
+      ${cols.map(([ty])=>{ const ts = ty==='maj'?P.maj[0]:P.min[0], id = kStr(N(ts))+'|'+ty, st=(S.progress[id]&&S.progress[id].s)||0;
+        return `<td><button class="mcell s${st}" data-act="cycle" data-id="${id}" title="${nmText(N(ts))} ${SC[ty].suf}: ${ST_NAMES[st]}">${ST_NAMES[st]}</button></td>`; }).join('')}</tr>`).join('')}</table>`;
+}
+function renderLog(){
+  const L = S.log.slice().sort((a,b)=> b.date.localeCompare(a.date) || b.ts-a.ts);
+  $('#p-log').innerHTML = `<h3 style="font-size:21px;margin-bottom:10px">Diário de estudo</h3>
+    <div class="form">
+      <label>Data<input type="date" id="lg-date" value="${today()}"></label>
+      <label>Minutos<input type="number" id="lg-min" min="1" value="15"></label>
+      <label style="grid-column:1/-1">O que estudei<input type="text" id="lg-txt" placeholder="ex.: Mi♭ maior mãos juntas, 2 oitavas"></label>
+      <label>BPM<input type="number" id="lg-bpm" min="20" placeholder="—"></label>
+      <button class="btn pri" data-act="log-add" style="justify-content:center">+ Registrar</button>
+    </div>
+    <div class="loglist">${L.length ? L.map(e=>`<div class="logi"><span class="d">${fmtDate(e.date)}</span><span>${esc(e.txt||'—')}</span><span class="m">${e.min} min${e.bpm?' · ♩'+e.bpm:''}</span><button class="btn sm ghost" data-act="log-del" data-id="${e.id}" title="Apagar">✕</button></div>`).join('') : `<div class="empty">Nenhuma sessão ainda.</div>`}</div>`;
+}
+function renderPratica(){ renderStats(); renderSess(); renderMatrix(); renderLog(); }
+function setStatus(id, s){ const p = S.progress[id] || {}; p.s = s; if (s>0 && !p.t) p.t = today(); S.progress[id] = p; saveProg(); }
+
+/* =====================================================================
+   SINCRONIZAÇÃO — na conta Claude (link publicado) ou neste navegador (arquivo)
+   ===================================================================== */
+const Cloud = { on:false, db:null, assets:null, downloads:null, inFrame: !!(window.claude && window.claude.use), ref:{}, dirty:{}, busy:{}, again:{}, t:{}, seen:{} };
+const KEYS = ['progress','log','notes','images'];
+const clone = o => JSON.parse(JSON.stringify(o ?? null));
+function setSync(state){
+  const el = $('#sync'); if (!el) return;
+  el.classList.toggle('on', Cloud.on); el.classList.toggle('busy', state==='busy');
+  el.querySelector('span').textContent = !Cloud.on ? 'salvo neste aparelho' : state==='busy' ? 'salvando…' : state==='err' ? 'erro ao salvar' : 'salvo na sua conta';
+}
+function bodyFor(k){
+  if (k==='progress') return {items: Object.entries(S.progress).map(([id,v]) => Object.assign({id}, clone(v)))};
+  if (k==='notes') return {items: Object.entries(S.notes).filter(([,v])=>v).map(([pos,text]) => ({pos, text}))};
+  if (k==='log') return {items: clone(S.log)};
+  if (k==='images') return {items: S.images.map(({_t, data, ...r}) => clone(r))};
+}
+function fromBody(k, d){
+  const items = (d && Array.isArray(d.items)) ? clone(d.items) : [];
+  if (k==='progress'){ const o={}; items.forEach(({id,...v}) => o[id]=v); return o; }
+  if (k==='notes'){ const o={}; items.forEach(x => o[x.pos]=x.text); return o; }
+  return items;
+}
+function localSave(k){
+  if (k==='progress') save('cq.progress', S.progress);
+  if (k==='log') save('cq.log', S.log);
+  if (k==='notes') save('cq.notes', S.notes);
+}
+function persist(k){
+  if (!Cloud.on){ localSave(k); return; }
+  Cloud.dirty[k] = true; clearTimeout(Cloud.t[k]); setSync('busy');
+  Cloud.t[k] = setTimeout(() => flush(k), k==='notes' ? 800 : 350);
+}
+async function flush(k, retried){
+  if (Cloud.busy[k]){ Cloud.again[k] = true; return; }
+  Cloud.busy[k] = true;
+  try { await Cloud.ref[k].set(bodyFor(k)); setSync('ok'); }
+  catch(e){
+    if (e && e.code==='unavailable' && !retried){ Cloud.busy[k]=false; setTimeout(()=>flush(k,true), 800 + Math.random()*800); return; }
+    setSync('err');
+    toast(e && e.code==='quota_exceeded' ? 'Limite de armazenamento atingido. Apague imagens ou entradas antigas do diário.' : 'Não consegui salvar na sua conta agora. Tente de novo em instantes.');
+  }
+  Cloud.busy[k] = false;
+  if (Cloud.again[k]){ Cloud.again[k] = false; return flush(k); }
+  Cloud.dirty[k] = false;
+}
+let staleViews = false;
+function editing(){ const a = document.activeElement; return a && a.matches && a.matches('input[type=text],input:not([type]),textarea,input[type=number]'); }
+function onRemote(k){
+  if (k==='progress' || k==='images') renderWheel();
+  if (editing()){ staleViews = true; return; }
+  refreshView();
+}
+function refreshView(){
+  staleViews = false;
+  if (S.view==='ciclo') renderDetail();
+  if (S.view==='pratica') renderPratica();
+  if (S.view==='galeria') renderGallery();
+}
+document.addEventListener('focusout', () => setTimeout(() => { if (staleViews && !editing()) refreshView(); }, 50));
+async function migrateLocal(k){
+  // primeira vez na conta: leva o que já existia neste navegador
+  if (k==='images'){
+    const local = S._localImages || [];
+    if (!local.length || !Cloud.assets) return false;
+    for (const im of local){
+      try { const b = await (await fetch(im.data)).blob(); const r = await Cloud.assets.upload(b, {type: b.type==='image/webp'?'image/webp':'image/jpeg'}); S.images.push({id:im.id, asset:r.id, key:im.key, caption:im.caption, created:im.created, w:im.w, h:im.h}); } catch(e){}
+    }
+    if (S.images.length){ persist('images'); return true; }
+    return false;
+  }
+  const loc = k==='progress' ? load('cq.progress',{}) : k==='log' ? load('cq.log',[]) : load('cq.notes',{});
+  const has = Array.isArray(loc) ? loc.length : Object.keys(loc).length;
+  if (!has) return false;
+  if (k==='progress') S.progress = loc; else if (k==='log') S.log = loc; else S.notes = loc;
+  persist(k); return true;
+}
+async function initCloud(){
+  if (!Cloud.inFrame) return;
+  try {
+    const [db, user] = await Promise.all([claude.use('db'), claude.use('user')]);
+    if (!db || !user) return;
+    const uid = await user.id(); if (!uid) return;
+    Cloud.db = db;
+    [Cloud.assets, Cloud.downloads] = await Promise.all([claude.use('assets'), claude.use('downloads')]);
+    const base = 'data/users/' + uid + '/';
+    KEYS.forEach(k => Cloud.ref[k] = db.doc(base + 'cq_' + k));
+    S._localImages = S.images.slice();
+    Cloud.on = true; setSync('ok');
+    S.images = []; renderAll();
+    KEYS.forEach(k => {
+      Cloud.ref[k].onSnapshot(async snap => {
+        if (Cloud.dirty[k]) return;
+        const first = !Cloud.seen[k]; Cloud.seen[k] = true;
+        if (!snap.exists && first){ if (await migrateLocal(k)){ onRemote(k); return; } }
+        const v = fromBody(k, snap.exists ? snap.data() : null);
+        if (k==='progress') S.progress = v; else if (k==='log') S.log = v; else if (k==='notes') S.notes = v; else S.images = v;
+        onRemote(k);
+      }, e => { if (e && e.code==='revoked'){ Cloud.on=false; setSync(); } });
+    });
+  } catch(e){ Cloud.on = false; setSync(); }
+}
+const imgSrc = im => im.asset ? '/_blob/' + im.asset : im.data;
+function armed(el, label){
+  // confirmação em dois toques (o visualizador não mostra caixas de diálogo)
+  if (el.dataset.armed){ delete el.dataset.armed; el.classList.remove('armed'); return true; }
+  const orig = el.innerHTML; el.dataset.armed = '1'; el.classList.add('armed'); el.textContent = label || 'Toque de novo para confirmar';
+  setTimeout(() => { if (el.dataset.armed){ delete el.dataset.armed; el.classList.remove('armed'); el.innerHTML = orig; } }, 3500);
+  return false;
+}
+
+/* =====================================================================
+   IMAGENS — IndexedDB (grande), com recurso ao localStorage
+   ===================================================================== */
+const Store = {
+  db:null, mode:'idb',
+  async init(){
+    try {
+      this.db = await new Promise((res, rej) => {
+        const r = indexedDB.open('cicloquintas', 1);
+        r.onupgradeneeded = () => r.result.createObjectStore('images', {keyPath:'id'});
+        r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+      });
+    } catch(e){ this.mode = 'ls'; }
+    try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch(e){}
+  },
+  os(m){ return this.db.transaction('images', m).objectStore('images'); },
+  req(r){ return new Promise((res,rej)=>{ r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); }); },
+  async all(){ if (this.mode==='ls') return load('cq.images', []); return this.req(this.os('readonly').getAll()); },
+  async put(rec){
+    if (this.mode==='ls'){ const a = load('cq.images', []).filter(x=>x.id!==rec.id); a.push(rec); if (!save('cq.images', a)) throw new Error('quota'); return; }
+    return this.req(this.os('readwrite').put(rec));
+  },
+  async del(id){ if (this.mode==='ls'){ save('cq.images', load('cq.images',[]).filter(x=>x.id!==id)); return; } return this.req(this.os('readwrite').delete(id)); },
+  async clear(){ if (this.mode==='ls'){ save('cq.images', []); return; } return this.req(this.os('readwrite').clear()); }
+};
+function loadImg(src){ return new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=src; }); }
+async function processImage(blob){
+  const url = URL.createObjectURL(blob);
+  try {
+    const img = await loadImg(url), max = Store.mode==='ls' ? 1500 : 2400;
+    const k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+    const w = Math.round(img.naturalWidth*k), h = Math.round(img.naturalHeight*k);
+    const c = document.createElement('canvas'); c.width=w; c.height=h; const x = c.getContext('2d');
+    x.fillStyle='#fff'; x.fillRect(0,0,w,h); x.drawImage(img,0,0,w,h);
+    if (Cloud.on){
+      let blob = await new Promise(r => c.toBlob(r, 'image/webp', .9));
+      if (!blob || blob.type!=='image/webp') blob = await new Promise(r => c.toBlob(r, 'image/jpeg', .9));
+      return {blob, w, h};
+    }
+    let data = c.toDataURL('image/webp', Store.mode==='ls'?.8:.9);
+    if (!data.startsWith('data:image/webp')) data = c.toDataURL('image/jpeg', Store.mode==='ls'?.8:.9);
+    return {data, w, h};
+  } finally { URL.revokeObjectURL(url); }
+}
+function currentTag(){
+  if (S.view==='ciclo') return String(S.sel.pos);
+  if (S.view==='pratica' && S.session) return String(S.session.pos);
+  if (S.view==='galeria' && S.gfilter!=='all' && S.gfilter!=='none') return S.gfilter;
+  return '';
+}
+async function addImage(blob){
+  if (!blob) return;
+  try {
+    if (Cloud.on && !Cloud.assets){ toast('Só quem pode editar este link consegue adicionar imagens.'); return; }
+    const p = await processImage(blob), key = currentTag();
+    let rec;
+    if (Cloud.on){
+      setSync('busy');
+      const r = await Cloud.assets.upload(p.blob, {type: p.blob.type});
+      rec = {id:uid(), asset:r.id, w:p.w, h:p.h, key, caption:'', created:Date.now()};
+      S.images.push(rec); persist('images');
+    } else {
+      rec = {id:uid(), data:p.data, w:p.w, h:p.h, key, caption:'', created:Date.now()};
+      await Store.put(rec); S.images.push(rec);
+    }
+    toast('Imagem salva' + (key!=='' ? ' em ' + posLabel(+key, true) : ' na galeria'));
+    if (S.view==='ciclo'){ S.settings.groups.prints = true; saveSet(); renderDetail(); }
+    renderGallery();
+  } catch(e){ setSync(Cloud.on?'ok':undefined); toast((e && (e.message==='quota' || e.code==='quota_or_state')) ? 'Sem espaço para mais imagens. Apague algumas antigas.' : e && e.code==='too_large' ? 'Imagem grande demais.' : 'Não consegui salvar essa imagem.'); }
+}
+function keyOptions(sel){
+  return `<option value="" ${sel===''?'selected':''}>Sem tonalidade</option>` + POS.map((P,i)=>`<option value="${i}" ${sel===String(i)?'selected':''}>${posLabel(i,true)}</option>`).join('');
+}
+function filteredImages(){
+  const f = S.gfilter; let a = S.images.slice().sort((x,y)=>y.created-x.created);
+  if (f==='none') a = a.filter(i=>i.key===''); else if (f!=='all') a = a.filter(i=>i.key===f);
+  return a;
+}
+function renderGallery(){
+  const sel = $('#gfilter');
+  sel.innerHTML = `<option value="all">Todas as imagens</option><option value="none">Sem tonalidade</option>` + POS.map((P,i)=>{ const c=S.images.filter(x=>x.key===String(i)).length; return `<option value="${i}">${posLabel(i,true)}${c?' ('+c+')':''}</option>`; }).join('');
+  sel.value = S.gfilter;
+  const tg = currentTag(); $('#gtarget').textContent = tg==='' ? 'Sem tonalidade (escolha um filtro acima para marcar automaticamente)' : posLabel(+tg, true);
+  const a = filteredImages();
+  $('#gcount').textContent = `${a.length} de ${S.images.length} imagens`;
+  $('#ggrid').innerHTML = a.length ? a.map(im => `
+    <div class="card gcard">
+      <button class="im" data-act="img-open" data-id="${im.id}"><img src="${imgSrc(im)}" alt="${esc(im.caption)}" loading="lazy"></button>
+      <div class="meta">
+        <input type="text" placeholder="Legenda…" value="${esc(im.caption)}" data-cap="${im.id}">
+        <select data-ikey="${im.id}">${keyOptions(im.key)}</select>
+        <div class="foot"><span>${new Date(im.created).toLocaleDateString('pt-BR')} · ${im.w}×${im.h}</span><button class="btn sm ghost" data-act="img-del" data-id="${im.id}">Apagar</button></div>
+      </div>
+    </div>`).join('') : `<div class="card empty" style="grid-column:1/-1">Nenhuma imagem aqui ainda.</div>`;
+}
+let LB = {list:[], i:0};
+function openLB(id){
+  const inDetail = S.view==='ciclo';
+  LB.list = inDetail ? S.images.filter(im=>im.key===String(S.sel.pos)) : filteredImages();
+  LB.i = Math.max(0, LB.list.findIndex(x=>x.id===id)); showLB(); $('#lb').classList.add('on');
+}
+function showLB(){ const im = LB.list[LB.i]; if (!im) return; $('#lbi').src = imgSrc(im); $('#lbcap').textContent = (im.caption||'Sem legenda') + (im.key!==''?' — '+posLabel(+im.key,true):'') + `  (${LB.i+1}/${LB.list.length})`; $('#lbimg').classList.remove('zoom'); }
+
+/* =====================================================================
+   AJUSTES
+   ===================================================================== */
+function applyTheme(){ /* o tema segue o aparelho / a escolha do visualizador */ }
+function onThemeChange(){ renderWheel(); if (S.view==='ciclo') renderDetail(); if (S.view==='pratica') renderSess(); }
+try { new MutationObserver(onThemeChange).observe(document.documentElement, {attributes:true, attributeFilter:['data-theme']}); } catch(e){}
+async function renderAjustes(){
+  $('#set-names').innerHTML = [['pt','Dó Ré Mi'],['en','C D E'],['ext','Por extenso']].map(([k,l])=>`<button class="${S.settings.names===k?'on x':''}" data-act="set" data-k="names" data-v="${k}">${l}</button>`).join('');
+  $('#names-ex').innerHTML = buildScale(N('E'),'harm').concat([N('E')]).map(n=>nm(n)).join(' – ') + ' <span class="muted" style="font-family:var(--sans);font-weight:400;font-size:13px">(Mi menor harmônica)</span>';
+  let info = '';
+  if (Cloud.on){
+    info = `${S.images.length} imagens.`;
+    try { if (Cloud.assets){ const u = (await Cloud.assets.list()).usage; info += ` Espaço usado: ${(u.bytes/1048576).toFixed(1)} MB de ${(u.maxBytes/1048576).toFixed(0)} MB.`; } } catch(e){}
+    $('#sync-info').innerHTML = 'Progresso, diário, anotações e prints ficam <b>salvos na sua conta Claude</b>. Abra este mesmo link no PC e no tablet e tudo aparece nos dois, sincronizado. Só você vê esses dados, mesmo se compartilhar o link.';
+  } else {
+    info = `Imagens guardadas em: ${Store.mode==='idb'?'banco local do navegador (IndexedDB)':'localStorage (limite ~5 MB)'}. ${S.images.length} imagens.`;
+    try { if (navigator.storage && navigator.storage.estimate){ const e = await navigator.storage.estimate(); info += ` Uso: ${(e.usage/1048576).toFixed(1)} MB.`; } } catch(e){}
+    $('#sync-info').innerHTML = Cloud.inFrame
+      ? 'Não consegui acessar sua conta nesta visualização, então os dados estão ficando <b>só neste navegador</b>. Entre na sua conta Claude e abra o link de novo para sincronizar.'
+      : 'Você está usando a versão em arquivo: os dados ficam <b>só neste navegador</b>. Pelo link do Claude, eles ficam salvos na sua conta e sincronizam entre aparelhos.';
+  }
+  $('#storage-info').textContent = info;
+  const ex = $('[data-act="export"]'); if (ex) ex.hidden = Cloud.inFrame && !Cloud.downloads;
+}
+const blobToDataURL = b => new Promise((res,rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(b); });
+async function exportBackup(){
+  let images = [];
+  if (Cloud.on){
+    toast('Preparando backup…');
+    for (const im of S.images){ try { const b = await (await fetch(imgSrc(im))).blob(); images.push({id:im.id, data: await blobToDataURL(b), key:im.key, caption:im.caption, created:im.created, w:im.w, h:im.h}); } catch(e){} }
+  } else images = await Store.all();
+  const data = {app:'cicloquintas', v:1, date:new Date().toISOString(), settings:S.settings, progress:S.progress, log:S.log, notes:S.notes, images};
+  const filename = `cicloquintas-backup-${today()}.json`, json = JSON.stringify(data);
+  if (Cloud.inFrame){
+    if (!Cloud.downloads){ toast('Exportar não está disponível nesta visualização.'); return; }
+    try { await Cloud.downloads.save({filename, data: new Blob([json], {type:'application/json'})}); toast('Backup salvo.'); }
+    catch(e){ if (!e || e.code!=='declined') toast('Não consegui salvar o backup.'); }
+    return;
+  }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([json], {type:'application/json'})); a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href), 4000); toast('Backup exportado.');
+}
+async function importBackup(file){
+  try {
+    const d = JSON.parse(await file.text()); if (d.app!=='cicloquintas') throw 0;
+    Object.assign(S.progress, d.progress||{}); saveProg();
+    const ids = new Set(S.log.map(e=>e.id)); (d.log||[]).forEach(e=>{ if(!ids.has(e.id)) S.log.push(e); }); saveLog();
+    Object.assign(S.notes, d.notes||{}); saveNotes();
+    const have = new Set(S.images.map(i=>i.id)); let n=0;
+    for (const im of (d.images||[])) if (!have.has(im.id)){
+      if (Cloud.on){ if (!Cloud.assets) break; try { const b = await (await fetch(im.data)).blob(); const r = await Cloud.assets.upload(b, {type: b.type==='image/webp'?'image/webp':b.type==='image/png'?'image/png':'image/jpeg'}); S.images.push({id:im.id, asset:r.id, key:im.key||'', caption:im.caption||'', created:im.created||Date.now(), w:im.w, h:im.h}); n++; } catch(e){} }
+      else { await Store.put(im); S.images.push(im); n++; } }
+    if (Cloud.on && n) persist('images');
+    toast(`Backup importado (${n} imagens novas).`); renderAll();
+  } catch(e){ toast('Arquivo de backup inválido.'); }
+}
+
+/* =====================================================================
+   NAVEGAÇÃO / EVENTOS
+   ===================================================================== */
+function selectKey(pos, q, alt){
+  S.sel = {pos:+pos, q:q||S.sel.q, alt: alt!==undefined ? +alt : (S.sel.pos===+pos ? S.sel.alt : 0)};
+  if (S.sel.alt >= POS[S.sel.pos].maj.length) S.sel.alt = 0;
+  S.settings.sel = S.sel; saveSet(); renderWheel(); renderKeystrip(); renderDetail();
+}
+function setView(v){
+  S.view = v; $$('.view').forEach(e=>e.classList.toggle('on', e.id==='v-'+v)); $$('#tabs button').forEach(b=>b.classList.toggle('on', b.dataset.view===v));
+  if (v==='pratica') renderPratica(); if (v==='galeria') renderGallery(); if (v==='ajustes') renderAjustes(); if (v==='ciclo') renderDetail();
+  window.scrollTo({top:0});
+}
+function renderAll(){ applyTheme(); renderWheel(); renderKeystrip(); renderDetail(); renderMetro(); $('#fabbpm').textContent = Metro.bpm; if (S.view!=='ciclo') setView(S.view); }
+function startSession(pos, type, dir, random){ S.session = {pos:+pos, type, dir:+dir||1, start:Date.now(), visited:[+pos], random:!!random}; renderSess(); }
+function sortear(){
+  const cells = []; const tys = ['maj','nat','harm','mel'];
+  POS.forEach((P,p)=>tys.forEach(ty=>{ const ts = ty==='maj'?P.maj[0]:P.min[0], id=kStr(N(ts))+'|'+ty, st=(S.progress[id]&&S.progress[id].s)||0; cells.push({p,ty,w:4-st}); }));
+  const tot = cells.reduce((a,c)=>a+c.w,0); let r = Math.random()*tot, c = cells[0];
+  for (const x of cells){ r -= x.w; if (r<=0){ c=x; break; } }
+  if (S.session){ S.session.pos=c.p; S.session.type=c.ty; S.session.random=true; if(!S.session.visited.includes(c.p)) S.session.visited.push(c.p); renderSess(); }
+  else startSession(c.p, c.ty, 1, true);
+}
+
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  const a = el.dataset.act, id = el.dataset.id;
+  switch (a){
+    case 'view': setView(el.dataset.view); break;
+    case 'sel': selectKey(el.dataset.pos, el.dataset.q, el.dataset.alt); break;
+    case 'sel-go': setView('ciclo'); selectKey(el.dataset.pos, 'maj', 0); break;
+    case 'alt': selectKey(S.sel.pos, S.sel.q, 1 - S.sel.alt); break;
+    case 'wtog': S.settings[el.dataset.k] = !S.settings[el.dataset.k]; saveSet(); renderWheel(); break;
+    case 'toggle-scale': if (e.target.closest('button') && e.target.closest('button')!==el) break; S.open.has(id) ? S.open.delete(id) : S.open.add(id); rerenderScale(id); break;
+    case 'play': e.stopPropagation(); playScale(id, el.dataset.mode, el.closest('.scale')); break;
+    case 'stop': stopPlay(); break;
+    case 'score': e.stopPropagation(); { const pr = S.progress[id]; openModal({kind:'score', id, view:'scale', n:1, bpm: (pr && pr.bpm) || 100}); } break;
+    case 'sc-view': S.modal.view = el.dataset.v; S.modal.bpm = +($('#sc-bpm')?.value)||S.modal.bpm; stopPlay(); renderModal(); break;
+    case 'sc-n': S.modal.n = +el.dataset.v; S.modal.bpm = +($('#sc-bpm')?.value)||S.modal.bpm; stopPlay(); renderModal(); break;
+    case 'sc-play': playScore(); break;
+    case 'modal-close': closeModal(); break;
+    case 'chord': { const st = {kind:'chord', root: el.dataset.root, sym: el.dataset.sym, ctx: el.dataset.ctx || (S.modal && S.modal.ctx) || ''}; if (S.modal){ S.modal = st; stopPlay(); renderModal(); $('#modal').scrollTop = 0; } else openModal(st); } break;
+    case 'ch-play': playNotesIn(el.closest('.vcard'), chordNotes(N(el.dataset.root), el.dataset.sym).map(midiOf), true); break;
+    case 'inv-play': { const m = S.modal, ns = chordNotes(N(m.root), m.sym), invs = CHORD[m.sym].iv.length<=4 && CHORD[m.sym].iv.length>=3 ? inversions(ns) : [ns]; playNotesIn(el.closest('.vcard'), invs[+el.dataset.i].map(midiOf), true); } break;
+    case 'status': setStatus(id, +el.dataset.s); refreshProgressViews(id); break;
+    case 'cycle': e.stopPropagation(); { const s = ((S.progress[id]&&S.progress[id].s)||0); setStatus(id, (s+1)%4); refreshProgressViews(id); } break;
+    case 'trained': { const p = S.progress[id]||{}; p.t = today(); if(!p.s) p.s = 1; S.progress[id]=p; saveProg(); toast('Treino registrado.'); refreshProgressViews(id); } break;
+    case 'file-btn': $('#fileinp').click(); break;
+    case 'img-open': openLB(id); break;
+    case 'img-del': if (armed(el, 'Confirmar')){
+      const im = S.images.find(x=>x.id===id); S.images = S.images.filter(x=>x.id!==id);
+      if (Cloud.on){ persist('images'); if (im && im.asset && Cloud.assets) Cloud.assets.delete(im.asset).catch(()=>{}); }
+      else Store.del(id);
+      renderGallery(); renderWheel(); toast('Imagem apagada.'); } break;
+    case 'lb-close': $('#lb').classList.remove('on'); break;
+    case 'lb-prev': LB.i = (LB.i-1+LB.list.length)%LB.list.length; showLB(); break;
+    case 'lb-next': LB.i = (LB.i+1)%LB.list.length; showLB(); break;
+    case 'metro-panel': { const m=$('#metro'); m.classList.toggle('on'); if (m.classList.contains('on')) renderMetro(); } break;
+    case 'metro-run': Metro.on ? Metro.stop() : Metro.start(); break;
+    case 'metro-step': setBpm(Metro.bpm + (+el.dataset.d)); break;
+    case 'metro-tap': { const now=performance.now(); taps = taps.filter(t=>now-t<2500); taps.push(now); if (taps.length>1){ const iv=(taps[taps.length-1]-taps[0])/(taps.length-1); setBpm(60000/iv); } } break;
+    case 'sess-start': startSession($('#sx-pos').value, $('#sx-type').value, $('#sx-dir').value, false); break;
+    case 'sess-here': setView('pratica'); startSession(S.sel.pos, S.sel.q==='maj'?'maj':'nat', 1, false); break;
+    case 'sess-step': { const se=S.session; se.pos = (se.pos + se.dir*(+el.dataset.d) + 12) % 12; if (!se.visited.includes(se.pos)) se.visited.push(se.pos); stopPlay(); renderSess(); } break;
+    case 'sortear': sortear(); break;
+    case 'sess-end': {
+      const se = S.session, min = Math.max(1, Math.round((Date.now()-se.start)/60000));
+      const txt = se.random ? 'Sorteio de escalas' : `Ciclo (${SC[se.type].suf}) — ${se.visited.map(p=>nmText(N(sessTonic(p,se.type)),'pt')).join(', ')}`;
+      S.log.push({id:uid(), date:today(), min, txt, bpm:'', ts:Date.now()}); saveLog(); S.session=null; renderPratica(); toast(`Sessão de ${min} min registrada.`);
+    } break;
+    case 'sess-cancel': S.session=null; renderSess(); break;
+    case 'log-add': {
+      const min = +$('#lg-min').value; if (!min){ toast('Informe os minutos.'); break; }
+      S.log.push({id:uid(), date:$('#lg-date').value||today(), min, txt:$('#lg-txt').value.trim(), bpm:$('#lg-bpm').value, ts:Date.now()}); saveLog(); renderStats(); renderLog(); toast('Registrado.');
+    } break;
+    case 'log-del': S.log = S.log.filter(x=>x.id!==id); saveLog(); renderStats(); renderLog(); break;
+    case 'set': S.settings[el.dataset.k] = el.dataset.v; saveSet(); renderAll(); renderAjustes(); break;
+    case 'export': exportBackup(); break;
+    case 'import': $('#importinp').click(); break;
+    case 'wipe': if (armed(el, 'Toque de novo para zerar')){
+      S.progress={}; S.log=[]; S.notes={}; saveProg(); saveLog(); saveNotes();
+      if ($('#wipe-imgs').checked){
+        if (Cloud.on){ const ids = S.images.map(i=>i.asset).filter(Boolean); S.images=[]; persist('images'); if (Cloud.assets) ids.forEach(a => Cloud.assets.delete(a).catch(()=>{})); }
+        else { Store.clear(); S.images=[]; } }
+      renderAll(); renderAjustes(); toast('Dados zerados.'); } break;
+  }
+});
+$('#modal').addEventListener('click', e => { if (e.target.id==='modal') closeModal(); });
+$('#lbimg').addEventListener('click', e => { if (e.target.id==='lbi') $('#lbimg').classList.toggle('zoom'); else if (e.target.id==='lbimg') $('#lb').classList.remove('on'); });
+document.addEventListener('keydown', e => {
+  if (S.modal && e.key==='Escape'){ closeModal(); return; }
+  if (S.modal && e.key==='Enter' && e.target.matches && e.target.matches('td.ch')){ e.target.click(); return; }
+  if (!$('#lb').classList.contains('on')) return;
+  if (e.key==='Escape') $('#lb').classList.remove('on');
+  if (e.key==='ArrowRight'){ LB.i=(LB.i+1)%LB.list.length; showLB(); }
+  if (e.key==='ArrowLeft'){ LB.i=(LB.i-1+LB.list.length)%LB.list.length; showLB(); }
+});
+function rerenderScale(id){
+  const old = $(`.scale[data-sid="${CSS.escape(id)}"]`); if (!old) return renderDetail();
+  // re-renderiza todos os cartões com este id (pode aparecer em mais de um grupo)
+  renderDetail(); if (S.view==='pratica') renderSess();
+  const n = $(`.scale[data-sid="${CSS.escape(id)}"]`); if (n && S.open.has(id)) n.scrollIntoView({block:'nearest', behavior:'smooth'});
+}
+function refreshProgressViews(){ renderWheel(); if (S.view==='ciclo') renderDetail(); if (S.view==='pratica'){ renderMatrix(); renderSess(); renderStats(); } }
+
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.dataset.bpm){ const p = S.progress[t.dataset.bpm]||{}; p.bpm = +t.value || undefined; S.progress[t.dataset.bpm]=p; saveProg(); toast('BPM salvo.'); }
+  if (t.dataset.ikey !== undefined){ const im = S.images.find(x=>x.id===t.dataset.ikey); im.key = t.value; if (Cloud.on) persist('images'); else Store.put(im); renderGallery(); }
+  if (t.id==='gfilter'){ S.gfilter = t.value; renderGallery(); }
+  if (t.id==='mrange'){ setBpm(+t.value); }
+  if (t.id==='mbeatsel'){ S.settings.metroBeats = +t.value; saveSet(); renderMetro(); }
+  if (t.id==='sx-type2' && S.session){ S.session.type = t.value; renderSess(); }
+  if (t.id==='fileinp'){ [...t.files].forEach(addImage); t.value=''; }
+  if (t.id==='importinp' && t.files[0]){ importBackup(t.files[0]); t.value=''; }
+});
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.id==='mrange'){ setBpm(+t.value); }
+  if (t.dataset.notes !== undefined){ S.notes[t.dataset.notes] = t.value; saveNotes(); }
+  if (t.dataset.cap){ const im = S.images.find(x=>x.id===t.dataset.cap); im.caption = t.value; if (Cloud.on){ persist('images'); } else { clearTimeout(im._t); im._t = setTimeout(()=>{ const {_t, ...rec} = im; Store.put(rec); }, 400); } }
+});
+document.addEventListener('toggle', e => {
+  const d = e.target; if (d.matches && d.matches('details[data-g]')){ S.settings.groups[d.dataset.g] = d.open; saveSet(); }
+}, true);
+// colar imagens: Ctrl+V em qualquer lugar
+document.addEventListener('paste', e => {
+  const items = [...((e.clipboardData && e.clipboardData.items) || [])].filter(i => i.type && i.type.startsWith('image/'));
+  if (!items.length) return;
+  e.preventDefault(); items.forEach(i => addImage(i.getAsFile()));
+});
+// arrastar e soltar
+['dragover','dragenter'].forEach(ev => document.addEventListener(ev, e => { if ([...(e.dataTransfer?.items||[])].some(i=>i.kind==='file')){ e.preventDefault(); $('#gdrop').classList.add('hover'); } }));
+['dragleave','drop'].forEach(ev => document.addEventListener(ev, () => $('#gdrop').classList.remove('hover')));
+document.addEventListener('drop', e => { const f=[...(e.dataTransfer?.files||[])].filter(f=>f.type.startsWith('image/')); if (f.length){ e.preventDefault(); f.forEach(addImage); } });
+try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', onThemeChange); } catch(e){}
+
+/* =====================================================================
+   DEDILHADO — regras tradicionais
+   Escala: o polegar só em tecla branca; os grupos 1-2-3 e 1-2-3-4 (MD)
+   terminam de preferência em tecla preta, onde a passagem do polegar
+   é mais natural; polegar na tônica quando ela é branca.
+   ===================================================================== */
+const isBlackPc = p => [1,3,6,8,10].includes(((p%12)+12)%12);
+function compositions(N){
+  const allowed = N===7 ? [3,4] : N===6 ? [2,3,4] : N===5 ? [2,3] : N===3 ? [3] : [2,3,4];
+  const out = [];
+  (function rec(rem, acc){ if (rem===0){ out.push(acc.slice()); return; } for (const a of allowed) if (a<=rem){ acc.push(a); rec(rem-a, acc); acc.pop(); } })(N, []);
+  return out;
+}
+/* devolve o dedo "de ciclo" de cada grau (índice 0 = tônica) */
+function fingerCycle(pcs, hand){
+  const N = pcs.length, black = pcs.map(isBlackPc);
+  let best = null;
+  for (const comp of compositions(N)) for (let s=0; s<N; s++){
+    const f = new Array(N); let score = 0, ok = true, idx = s, groups = [];
+    for (const len of comp){
+      const g = []; for (let j=0;j<len;j++){ g.push((idx+j)%N); } groups.push(g); idx += len;
+    }
+    for (const g of groups){
+      const len = g.length;
+      if (hand==='R'){
+        g.forEach((d,j) => f[d] = j+1);
+        if (black[g[0]]) { ok = false; score -= 20; }
+        if (black[g[len-1]]) score += len>=4 ? 3 : len===3 ? 2 : 1;
+        if (g[0]===0) score += 4;
+      } else {
+        g.forEach((d,j) => f[d] = len-j);
+        if (black[g[len-1]]) { ok = false; score -= 20; }
+        if (black[g[0]]) score += len>=4 ? 3 : len===3 ? 2 : 1;
+        if (g[len-1]===0) score += 6;
+      }
+    }
+    // desempate: grupo de 3 junto da tônica
+    let tie = 0;
+    if (hand==='R'){ const g = groups.find(g=>g[0]===0); if (g && g.length===3) tie = 1; }
+    else { const g = groups.find(g=>g[g.length-1]===0); if (g && g.length===3) tie = 1; }
+    const cand = {f, score, tie, ok, s};
+    if (!best || cand.score > best.score || (cand.score===best.score && cand.tie > best.tie)) best = cand;
+  }
+  return best.f;
+}
+/* dedilhado completo para n oitavas subindo (comprimento n*N+1) */
+function scaleFingering(pcs, hand, n){
+  const N = pcs.length, c = fingerCycle(pcs, hand), out = [];
+  for (let k=0; k<=n*N; k++) out.push(c[k % N]);
+  if (hand==='R'){ if (c[0]===1) out[n*N] = Math.min(5, c[N-1]+1); }
+  else { if (c[0]===1) out[0] = Math.min(5, c[1]+1); }
+  return out;
+}
+/* arpejo (tríade): polegar na primeira tecla branca a partir da fundamental */
+function arpFingering(pcs, hand, n){
+  const N = 3, black = pcs.map(isBlackPc);
+  let t = [0,1,2].find(i => !black[i]); if (t===undefined) t = 0;
+  const c = new Array(3), gap = (a,b) => ((pcs[b%3]-pcs[a%3])%12+12)%12 || 12;
+  if (hand==='R'){
+    const g = [t, (t+1)%3, (t+2)%3];
+    c[g[0]] = 1; c[g[1]] = 2; c[g[2]] = gap(g[1], g[2]) >= 5 ? 4 : 3;
+  } else {
+    // ME subindo: grupo termina no polegar
+    let th = !black[0] ? 0 : [1,2].find(i => !black[i]); if (th===undefined) th = 0;
+    const g = [(th+1)%3, (th+2)%3, th];
+    c[g[2]] = 1; c[g[1]] = 2; c[g[0]] = gap(g[0], g[1]) >= 4 ? 3 : 4;
+  }
+  const out = []; for (let k=0;k<=n*N;k++) out.push(c[k%N]);
+  if (hand==='R'){ if (c[0]===1) out[n*N] = 5; else if (out[1]===1) out[0] = 2; }
+  else { if (c[0]===1) out[0] = 5; }
+  return out;
+}
+
+/* =====================================================================
+   PARTITURA — motor próprio em SVG (pauta dupla, armadura, acidentes,
+   8va, dedilhados). Funciona offline.
+   ===================================================================== */
+const TREB0 = 4*7+2, BASS0 = 2*7+4;           // E4 e G2 = linha inferior
+const dIdx = n => n.oct*7 + n.l;
+const TS_POS = [8,5,9,6,3,7,4], TF_POS = [4,7,3,6,2,5,1];
+const CLEF_T = 'M-1,24C-6,24-6,17-1,17C3,17 4,22 1,26C-2,30 6,30 6,22L2,-30C1,-38 5,-46 8,-42C11,-38 4,-28-4,-20C-12,-12-10,3 0,4C8,5 11,-5 4,-8C-2,-10-5,-4-1,-1';
+const CLEF_B = 'M-5,-1C-5,-9 10,-10 10,1C10,12 0,20-7,24';
+function clefSVG(type, x, y){ // y = linha da clave (Sol: 2ª linha; Fá: 4ª linha)
+  if (type==='t') return `<g class="clef" transform="translate(${x},${y})"><path d="${CLEF_T}" fill="none" stroke-width="2.3" stroke-linecap="round"/><circle cx="-2" cy="21" r="3.2"/></g>`;
+  return `<g class="clef" transform="translate(${x},${y})"><path d="${CLEF_B}" fill="none" stroke-width="2.8" stroke-linecap="round"/><circle cx="-4" cy="-1" r="3.4"/><circle cx="15" cy="-5" r="1.9"/><circle cx="15" cy="5" r="1.9"/></g>`;
+}
+function accSVG(a, x, y){
+  const g = d => `<g class="acg" transform="translate(${x},${y})">${d}</g>`;
+  const sharp = (dx=0) => `<path d="M${dx-2.4},-10.5V9.5M${dx+2.4},-9.5V10.5" stroke-width="1.3"/><path d="M${dx-5.2},-1.8L${dx+5.2},-5M${dx-5.2},5L${dx+5.2},1.8" stroke-width="2.8"/>`;
+  const flat = (dx=0) => `<path d="M${dx-3},-14V5" stroke-width="1.4"/><path d="M${dx-3},4.6C${dx+3},1.6 ${dx+6},-2.6 ${dx+3.4},-4.4C${dx+1.4},-5.6 ${dx-1.6},-4 ${dx-3},-2" stroke-width="2"/>`;
+  if (a===1) return g(sharp());
+  if (a===-1) return g(flat());
+  if (a===0) return g(`<path d="M-2.6,-10V4.5M2.6,-4.5V10" stroke-width="1.3"/><path d="M-2.6,-1.4L2.6,-3.4M-2.6,4.4L2.6,2.4" stroke-width="2.6"/>`);
+  if (a===2) return g(`<path d="M-3.6,-3.6L3.6,3.6M3.6,-3.6L-3.6,3.6" stroke-width="2.2" stroke-linecap="round"/><path d="M-4.4,-4.4h2.4v2.4h-2.4zM2,-4.4h2.4v2.4H2zM-4.4,2h2.4v2.4h-2.4zM2,2h2.4v2.4H2z" stroke="none" class="fillink"/>`);
+  if (a===-2) return g(flat(-4)+flat(3));
+  return '';
+}
+/* acidentes a desenhar, respeitando armadura e o compasso */
+function accidentalsFor(seq, sigAcc, barEvery){
+  let state = {}; return seq.map((n,i) => {
+    if (i % barEvery === 0) state = {};
+    const key = n.l+'_'+n.dOct, cur = (key in state) ? state[key] : sigAcc[n.l];
+    if (n.a !== cur){ state[key] = n.a; return n.a; }
+    return null;
+  });
+}
+function sigAccOf(sig){
+  const acc = [0,0,0,0,0,0,0]; if (Math.abs(sig)>7) return acc;
+  const order = sig>0 ? [3,0,4,1,5,2,6] : [6,2,5,1,4,0,3];
+  for (let i=0;i<Math.abs(sig);i++) acc[order[i]] = sig>0?1:-1;
+  return acc;
+}
+function keySigSVG(sig, x, top, off){
+  if (Math.abs(sig)>7 || !sig) return '';
+  let h=''; const n=Math.abs(sig), P = sig>0?TS_POS:TF_POS;
+  for (let i=0;i<n;i++){ const y = top+40 - (P[i]+off)*5; h += accSVG(sig>0?1:-1, x+i*9.5, y); }
+  return h;
+}
+const keySigW = sig => (Math.abs(sig)>7 || !sig) ? 0 : Math.abs(sig)*9.5 + 4;
+/* deslocamento de oitava (8va/8vb) com histerese */
+function octModes(seq, clef){
+  const base = clef==='t'?TREB0:BASS0, hi = clef==='t'?13:12, lo = clef==='t'?-6:-5; let m = 0;
+  return seq.map(n => { const p = dIdx(n)-base;
+    if (m===0){ if (p>hi) m=-1; else if (p<lo) m=1; }
+    else if (m===-1 && p<=7) m=0; else if (m===1 && p>=-1) m=0;
+    return m; }).map((m,i,arr) => m).reduce((acc,m,i,arr) => {
+      // começa o 8va/8vb um pouco antes, para não haver salto brusco
+      acc.push(m);
+      if (m!==0 && i>0 && arr[i-1]===0){
+        let j = i-1; const P = k => dIdx(seq[k])-base;
+        while (j>=0 && acc[j]===0 && (m===-1 ? P(j)>=9 : P(j)<=-3)){ acc[j] = m; j--; }
+      }
+      return acc; }, []);
+}
+function ledgers(x, p, top){
+  let h=''; const y = q => top+40-q*5;
+  for (let q=-2;q>=p;q-=2) h += `<line class="led" x1="${x-9}" x2="${x+9}" y1="${y(q)}" y2="${y(q)}"/>`;
+  for (let q=10;q<=p;q+=2) h += `<line class="led" x1="${x-9}" x2="${x+9}" y1="${y(q)}" y2="${y(q)}"/>`;
+  return h;
+}
+const head = (x,y) => `<ellipse class="nh" cx="${x}" cy="${y}" rx="5.7" ry="4.2" transform="rotate(-20 ${x} ${y})"/>`;
+
+/* cols: [{R:{l,a,oct,f}, L:{l,a,oct,f}}] */
+function engraveScore(cols, o){
+  const per = o.perSys || 16, bar = o.barEvery || 8, sig = o.sig;
+  const sigAcc = sigAccOf(sig);
+  const hands = ['R','L'].map(H => {
+    const seq = cols.map(c => c[H]); const modes = octModes(seq, H==='R'?'t':'b');
+    seq.forEach((n,i) => { n.mode = modes[i]; n.dOct = n.oct + modes[i]; });
+    const acc = accidentalsFor(seq, sigAcc, bar);
+    return {H, seq, acc};
+  });
+  const SYS_H = 330, TOP = 78, GAP = 108; // por sistema
+  const ksW = keySigW(sig), x0 = 56 + ksW + 10;
+  const nSys = Math.ceil(cols.length/per);
+  let svg = '', maxW = 0;
+  for (let s=0;s<nSys;s++){
+    const i0 = s*per, i1 = Math.min(cols.length, i0+per), sy = s*SYS_H;
+    const tTop = sy+TOP, bTop = tTop+40+GAP;
+    // posições x
+    const xs = []; let x = x0;
+    for (let i=i0;i<i1;i++){
+      const hasAcc = hands.some(h => h.acc[i]!==null);
+      if (hasAcc) x += 9;
+      xs.push(x + 13); x += 28;
+      if ((i+1)%bar===0 && i+1<i1) x += 10;
+    }
+    const endX = x + 8; maxW = Math.max(maxW, endX + 14);
+    let g = '';
+    // destaque de coluna (cursor ao tocar)
+    for (let i=i0;i<i1;i++) g += `<rect class="colhl" data-c="${i}" x="${xs[i-i0]-14}" y="${tTop-58}" width="28" height="${bTop-tTop+40+110}" rx="6"/>`;
+    // pautas
+    [tTop,bTop].forEach(t => { for (let k=0;k<5;k++) g += `<line class="sl" x1="10" x2="${endX}" y1="${t+k*10}" y2="${t+k*10}"/>`; });
+    g += `<line class="bl" x1="10" x2="10" y1="${tTop}" y2="${bTop+40}"/><path class="brace" d="M7,${tTop}C-1,${tTop+30} 5,${(tTop+bTop+40)/2-8} -1,${(tTop+bTop+40)/2}C5,${(tTop+bTop+40)/2+8} -1,${bTop+10} 7,${bTop+40}"/>`;
+    g += clefSVG('t', 26, tTop+30) + clefSVG('b', 24, bTop+10);
+    g += keySigSVG(sig, 52, tTop, 0) + keySigSVG(sig, 52, bTop, -2);
+    // barras
+    for (let i=i0;i<i1-1;i++) if ((i+1)%bar===0){ const bx = (xs[i-i0]+xs[i-i0+1])/2 + (hands.some(h=>h.acc[i+1]!==null)?-4:0); g += `<line class="bl" x1="${bx}" x2="${bx}" y1="${tTop}" y2="${bTop+40}"/>`; }
+    if (i1===cols.length) g += `<line class="bl" x1="${endX-5}" x2="${endX-5}" y1="${tTop}" y2="${bTop+40}"/><rect class="fillink" x="${endX-2}" y="${tTop}" width="4" height="${bTop+40-tTop}"/>`;
+    else g += `<line class="bl" x1="${endX}" x2="${endX}" y1="${tTop}" y2="${bTop+40}"/>`;
+    // notas
+    hands.forEach(({H, seq, acc}) => {
+      const top = H==='R'?tTop:bTop, base = H==='R'?TREB0:BASS0;
+      const Y = [];
+      for (let i=i0;i<i1;i++){
+        const n = seq[i], p = n.dOct*7 + n.l - base, xx = xs[i-i0], y = top+40-p*5; Y.push(y);
+        g += ledgers(xx, p, top);
+        if (acc[i]!==null) g += accSVG(acc[i], xx-15, y);
+        g += head(xx, y);
+        if (n.f) g += `<text class="fg" x="${xx}" y="${H==='R'? y-11 : y+18}" text-anchor="middle">${n.f}</text>`;
+      }
+      // hastes e barras de colcheia (MD para baixo, ME para cima)
+      const last = cols.length-1;
+      let gi = i0;
+      while (gi < i1){
+        let ge = gi; const barId = Math.floor(gi/bar);
+        while (ge+1 < i1 && ge+1 !== last && Math.floor((ge+1)/4)===Math.floor(gi/4) && Math.floor((ge+1)/bar)===barId) ge++;
+        if (gi===last) ge = gi;
+        const ys = Y.slice(gi-i0, ge-i0+1), down = H==='R';
+        const by = down ? Math.max(...ys)+27 : Math.min(...ys)-27;
+        for (let i=gi;i<=ge;i++){
+          const xx = xs[i-i0], y = Y[i-i0];
+          g += down ? `<line class="stem" x1="${xx-5.2}" x2="${xx-5.2}" y1="${y+1}" y2="${by}"/>` : `<line class="stem" x1="${xx+5.2}" x2="${xx+5.2}" y1="${y-1}" y2="${by}"/>`;
+        }
+        if (ge>gi){
+          const xa = down ? xs[gi-i0]-5.9 : xs[gi-i0]+4.5, xb = down ? xs[ge-i0]-4.5 : xs[ge-i0]+5.9;
+          g += `<rect class="fillink" x="${xa}" y="${down? by-4.6 : by}" width="${xb-xa}" height="4.6"/>`;
+        }
+        gi = ge+1;
+      }
+      // 8va / 8vb
+      let r0 = null;
+      for (let i=i0;i<=i1;i++){
+        const m = i<i1 ? seq[i].mode : 0;
+        if (r0===null && m!==0) r0 = i;
+        else if (r0!==null && (m!==seq[r0].mode || i===i1)){
+          const mm = seq[r0].mode, xa = xs[r0-i0]-10, xb = xs[i-1-i0]+10, ys = Y.slice(r0-i0, i-i0);
+          if (mm===-1){
+            const ly = H==='R' ? Math.min(tTop-14, Math.min(...ys)-26) : Math.min(...Y)-42;
+            g += `<text class="ott" x="${xa}" y="${ly}">8va</text><path class="ottl" d="M${xa+22},${ly-4}H${xb}v8"/>`;
+          } else {
+            const ly = Math.max(...ys)+36;
+            g += `<text class="ott" x="${xa}" y="${ly}">8vb</text><path class="ottl" d="M${xa+22},${ly-4}H${xb}v-8"/>`;
+          }
+          r0 = (m!==0 && i<i1) ? i : null;
+        }
+      }
+    });
+    svg += g;
+  }
+  return `<svg class="score" viewBox="-4 0 ${maxW+4} ${nSys*SYS_H}" style="max-width:${Math.round((maxW+4)*1.35)}px">${svg}</svg>`;
+}
+
+/* acordes em semibreves (pauta de Sol), com segundas deslocadas */
+function chordStaffSVG(chords){
+  const W = 64 + chords.length*78, top = 46, H = top+40+58;
+  let g = '';
+  for (let k=0;k<5;k++) g += `<line class="sl" x1="6" x2="${W-6}" y1="${top+k*10}" y2="${top+k*10}"/>`;
+  g += `<line class="bl" x1="6" x2="6" y1="${top}" y2="${top+40}"/><line class="bl" x1="${W-6}" x2="${W-6}" y1="${top}" y2="${top+40}"/>`;
+  g += clefSVG('t', 22, top+30);
+  chords.forEach((c,ci) => {
+    const x = 74 + ci*78, ns = c.notes.slice().sort((a,b)=>dIdx(a)-dIdx(b));
+    let prevP = -99, shifted = false; const ps = [];
+    ns.forEach(n => { const p = dIdx(n)-TREB0; const sh = (p-prevP===1 && !shifted); shifted = sh; prevP = p; ps.push({n,p,sh}); });
+    ps.forEach(({p,sh}) => { g += ledgers(x + (sh?11:0), p, top); });
+    // acidentes de cima para baixo, alternando colunas quando próximos
+    let lastP = 99, lvl = 0;
+    ps.slice().reverse().forEach(({n,p}) => {
+      if (!n.a) return;
+      lvl = (lastP - p < 6) ? (lvl+1)%3 : 0; lastP = p;
+      g += accSVG(n.a, x-15-lvl*10, top+40-p*5);
+    });
+    ps.forEach(({p,sh}) => { const xx = x+(sh?11:0), y = top+40-p*5; g += `<ellipse class="nh" cx="${xx}" cy="${y}" rx="6.3" ry="4.4"/><ellipse class="wh" cx="${xx}" cy="${y}" rx="2.9" ry="2.1" transform="rotate(-55 ${xx} ${y})"/>`; });
+    if (c.label) g += `<text class="clab" x="${x+4}" y="${H-6}" text-anchor="middle">${c.label}</text>`;
+  });
+  return `<svg class="cstaff" viewBox="0 0 ${W} ${H}" style="max-width:${Math.round(W*1.3)}px">${g}</svg>`;
+}
+
+/* =====================================================================
+   MODAIS — partitura da escala/arpejo e variações de acordes
+   ===================================================================== */
+ACC_SYM['3']='♯×'; ACC_SYM['-3']='♭♭♭'; ACC_EXT['3']=' triplo sustenido'; ACC_EXT['-3']=' triplo bemol';
+const midiOf = n => 12*(n.oct+1) + NAT[n.l] + n.a;
+function spellI(root, steps, semis, rootOct){
+  const abs = root.l + steps, l = abs % 7;
+  let a = ((pcOf(root) + semis - NAT[l]) % 12 + 12) % 12; if (a > 6) a -= 12;
+  return {l, a, oct: (rootOct ?? 4) + Math.floor(abs/7)};
+}
+function triadOf(t, type){
+  if (!SC[type].lets){ const sc = buildScale(t, type); return [sc[0], sc[2], sc[4]]; }
+  const minor = ['pmin','bmin'].includes(type);
+  return [{...t}, spellI(t,2,minor?3:4), spellI(t,4,7)].map(n=>({l:n.l,a:n.a}));
+}
+function triadName(tri){
+  const iv = (a,b) => (pcOf(b)-pcOf(a)+12)%12, q = TRI[iv(tri[0],tri[1])+','+iv(tri[0],tri[2])];
+  return q ? ({maj:'maior',min:'menor',dim:'diminuta',aug:'aumentada'})[q[0]] : '';
+}
+/* sequência subindo e descendo para uma mão */
+function handSeq(t, cyc, lets, n, startOct, fing, descCyc, descFing){
+  const N = cyc.length, asc = [];
+  for (let k=0;k<=n*N;k++){ const d = k%N, abs = t.l + lets[d] + 7*Math.floor(k/N); asc.push({l:cyc[d].l, a:cyc[d].a, oct:startOct+Math.floor(abs/7), f:fing[k]}); }
+  let desc;
+  if (descCyc){
+    const da = [];
+    for (let k=0;k<=n*N;k++){ const d = k%N, abs = t.l + lets[d] + 7*Math.floor(k/N); da.push({l:descCyc[d].l, a:descCyc[d].a, oct:startOct+Math.floor(abs/7), f:descFing[k]}); }
+    desc = da.slice(0,-1).reverse();
+  } else desc = asc.slice(0,-1).reverse().map(x=>({...x}));
+  return asc.concat(desc);
+}
+function scoreCols(id, view, n){
+  const [ks, type] = id.split('|'), t = N(ks), d = SC[type];
+  let cyc, lets, descCyc = null;
+  if (view==='arp'){ cyc = triadOf(t, type); lets = [0,2,4]; }
+  else { cyc = buildScale(t, type); lets = d.lets || [0,1,2,3,4,5,6]; if (d.desc) descCyc = buildScale(t, d.desc); }
+  const pcs = cyc.map(pcOf), F = view==='arp' ? arpFingering : scaleFingering;
+  const fR = F(pcs,'R',n), fL = F(pcs,'L',n);
+  let dR = null, dL = null;
+  if (descCyc){ const dp = descCyc.map(pcOf); dR = scaleFingering(dp,'R',n); dL = scaleFingering(dp,'L',n); }
+  // oitava inicial de cada mão: a que pede menos linhas suplementares e 8va
+  const cost = (oct, clef) => {
+    const base = clef==='t'?TREB0:BASS0, hi = clef==='t'?13:12, lo = clef==='t'?-6:-5; let c = 0;
+    for (let k=0;k<=n*cyc.length;k++){ const d = k%cyc.length, abs = t.l + lets[d] + 7*Math.floor(k/cyc.length); const p = (oct+Math.floor(abs/7))*7 + cyc[d].l - base;
+      if (p>10) c += Math.ceil((p-9)/2); if (p<-1) c += Math.ceil((-p)/2); if (p>hi || p<lo) c += 6; }
+    return c;
+  };
+  const pick = (cands, clef) => cands.reduce((b,o) => cost(o,clef) < cost(b,clef) ? o : b);
+  const rOct = pick([4,3,5], 't'), lOct = pick([Math.min(rOct-1,3), Math.min(rOct-1,2), 1].filter((v,i,a)=>a.indexOf(v)===i), 'b');
+  const R = handSeq(t, cyc, lets, n, rOct, fR, descCyc, dR), L = handSeq(t, cyc, lets, n, lOct, fL, descCyc, dL);
+  return {cols: R.map((r,i) => ({R:r, L:L[i]})), sig: fifths(t) + d.sig, cyc, t, type};
+}
+
+/* ---------- acordes ---------- */
+const IV = {'1':[0,0],'b2':[1,1],'2':[1,2],'b3':[2,3],'3':[2,4],'4':[3,5],'#4':[3,6],'b5':[4,6],'5':[4,7],'#5':[4,8],'b6':[5,8],'6':[5,9],'bb7':[6,9],'b7':[6,10],'7':[6,11],'b9':[8,13],'9':[8,14],'#9':[8,15],'11':[10,17],'#11':[10,18],'b13':[12,20],'13':[12,21]};
+const CHORD_GROUPS = [
+  ['Tríades', [['','maior','1 3 5'],['m','menor','1 b3 5'],['°','diminuto','1 b3 b5'],['+','aumentado','1 3 #5'],['sus2','suspenso com 2ª','1 2 5'],['sus4','suspenso com 4ª','1 4 5'],['5','só fundamental e quinta (power chord)','1 5']]],
+  ['Com sexta', [['6','maior com sexta','1 3 5 6'],['m6','menor com sexta','1 b3 5 6'],['6/9','sexta e nona','1 3 5 6 9']]],
+  ['Tétrades', [['7M','sétima maior','1 3 5 7'],['7','sétima (dominante)','1 3 5 b7'],['m7','menor com sétima','1 b3 5 b7'],['m(7M)','menor com sétima maior','1 b3 5 7'],['m7(♭5)','meio-diminuto','1 b3 b5 b7'],['°7','diminuto (sétima diminuta)','1 b3 b5 bb7'],['7M(♯5)','sétima maior com quinta aumentada','1 3 #5 7'],['7(♯5)','dominante com quinta aumentada','1 3 #5 b7'],['7(♭5)','dominante com quinta diminuta','1 3 b5 b7'],['7sus4','dominante com 4ª suspensa','1 4 5 b7']]],
+  ['Com tensões', [['add9','maior com nona adicionada','1 3 5 9'],['m(add9)','menor com nona adicionada','1 b3 5 9'],['7M(9)','sétima maior e nona','1 3 5 7 9'],['7(9)','dominante com nona','1 3 5 b7 9'],['m7(9)','menor com sétima e nona','1 b3 5 b7 9'],['7(♭9)','dominante com nona menor','1 3 5 b7 b9'],['7(♯9)','dominante com nona aumentada','1 3 5 b7 #9'],['m7(11)','menor com sétima e 11ª','1 b3 5 b7 11'],['7M(♯11)','sétima maior com 11ª aumentada','1 3 5 7 #11'],['7(♯11)','dominante com 11ª aumentada','1 3 5 b7 #11'],['7(♭13)','dominante com 13ª menor','1 3 5 b7 b13'],['7(13)','dominante com 13ª','1 3 5 b7 13']]],
+];
+const CHORD = {}; CHORD_GROUPS.forEach(([g,l]) => l.forEach(([s,nm,iv]) => CHORD[s] = {s, nm, iv: iv.split(' '), g}));
+const ivLabel = s => s.replace(/b/g,'♭').replace(/#/g,'♯');
+function chordNotes(root, sym){ return CHORD[sym].iv.map(k => spellI(root, IV[k][0], IV[k][1], 4)); }
+function inversions(notes){
+  const out = [notes.map(n=>({...n}))];
+  for (let i=1;i<notes.length;i++){ const prev = out[i-1].map(n=>({...n})).sort((a,b)=>midiOf(a)-midiOf(b)); prev[0].oct += 1; out.push(prev.sort((a,b)=>midiOf(a)-midiOf(b))); }
+  return out;
+}
+
+/* ---------- modal genérico ---------- */
+function openModal(state){ S.modal = state; renderModal(); $('#modal').hidden = false; document.body.style.overflow = 'hidden'; }
+function closeModal(){ stopPlay(); S.modal = null; $('#modal').hidden = true; document.body.style.overflow = ''; }
+function renderModal(){
+  const m = S.modal; if (!m) return;
+  $('#mbody').innerHTML = m.kind==='score' ? scoreModalHTML(m) : chordModalHTML(m);
+}
+function scoreModalHTML(m){
+  const {cols, sig, cyc, t, type} = scoreCols(m.id, m.view, m.n), d = SC[type];
+  const isArp = m.view==='arp', tri = isArp ? cyc : null;
+  const title = isArp ? `Arpejo de ${nm(t)} ${triadName(tri)}` : `${nm(t)} ${d.suf}`;
+  const src = isArp
+    ? 'Dedilhado sugerido para arpejos. Na mão esquerda, alguns métodos trocam o 3 pelo 4 na segunda nota conforme a abertura da mão.'
+    : type==='maj'
+      ? 'Dedilhado padrão das escalas maiores. Nas viradas de oitava o polegar entra no lugar do 5º dedo.'
+      : 'Dedilhado calculado pelas regras tradicionais: polegar só em tecla branca e passagem logo depois de uma tecla preta. A mesma regra reproduz o dedilhado padrão de todas as escalas maiores e das menores harmônicas usuais. Vale conferir com seu professor.';
+  const bpm = m.bpm || 100;
+  return `
+  <div class="mhead">
+    <div><div class="eyebrow">Partitura e dedilhado</div><h2>${title}</h2>
+      <div class="muted" style="font-size:13.5px;margin-top:4px">${isArp ? cyc.map(n=>nm(n)).join(' – ') : buildScale(t,type).concat([t]).map(n=>nm(n)).join(' – ')}</div></div>
+    <button class="btn sm" data-act="modal-close">Fechar ✕</button>
+  </div>
+  <div class="mctrl">
+    <div class="seg"><button class="${!isArp?'on x':''}" data-act="sc-view" data-v="scale">Escala</button><button class="${isArp?'on x':''}" data-act="sc-view" data-v="arp">Arpejo</button></div>
+    <div class="seg">${[1,2,3].map(k=>`<button class="${m.n===k?'on x':''}" data-act="sc-n" data-v="${k}">${k} oitava${k>1?'s':''}</button>`).join('')}</div>
+    <button class="btn pri" data-act="sc-play">▶ Tocar mãos juntas</button>
+    <button class="btn" data-act="stop">■</button>
+    <label class="muted" style="font-size:13px;font-weight:600;display:flex;gap:6px;align-items:center">BPM <input class="inp" type="number" id="sc-bpm" min="30" max="300" value="${bpm}" style="width:76px;min-height:36px"></label>
+  </div>
+  <div class="mnote"><b>Como ler:</b> mão direita na pauta de cima (dedos acima das notas), mão esquerda na de baixo (dedos abaixo). 1 = polegar · 2 = indicador · 3 = médio · 4 = anelar · 5 = mínimo.${d.desc && !isArp ? ' Na melódica, a descida usa a menor natural.' : ''}</div>
+  <div class="scorewrap">${engraveScore(cols, {sig, perSys: (window.innerWidth < 760 ? 8 : 16), barEvery: 8})}</div>
+  <p class="muted" style="font-size:12.5px;margin:10px 2px 0">${src}</p>`;
+}
+function chordCard(root, sym, cur){
+  const c = CHORD[sym], ns = chordNotes(root, sym), ms = ns.map(midiOf);
+  return `<div class="vcard ${cur?'on':''}" data-chord-card="${esc(sym)}">
+    <div class="row" style="justify-content:space-between;align-items:baseline"><span class="cf">${cifra(root)}${sym}</span>
+      <span class="row" style="gap:4px"><button class="ibtn" data-act="ch-play" data-root="${kStr(root)}" data-sym="${esc(sym)}" title="Ouvir">▶</button>${cur?'':`<button class="btn sm" data-act="chord" data-root="${kStr(root)}" data-sym="${esc(sym)}">Ver</button>`}</span></div>
+    <div class="nm">${c.nm} · ${c.iv.map(ivLabel).join(' ')}</div>
+    <div class="ns">${ns.map(n=>nm(n)).join(' – ')}</div>
+    ${keyboardSVG(ms, c.iv.map(ivLabel))}
+  </div>`;
+}
+function chordModalHTML(m){
+  const root = N(m.root), c = CHORD[m.sym], ns = chordNotes(root, m.sym);
+  const invs = c.iv.length <= 4 && c.iv.length >= 3 ? inversions(ns) : [ns];
+  const invNames = ['Fundamental','1ª inversão','2ª inversão','3ª inversão'];
+  const slash = inv => { const b = inv[0]; return pcOf(b)===pcOf(root) && b.l===root.l ? cifra(root)+m.sym : `${cifra(root)}${m.sym}/${cifra(b)}`; };
+  const staff = chordStaffSVG(invs.map((inv,i) => ({notes: inv, label: invs.length>1 ? invNames[i] : 'Posição fechada'})));
+  return `
+  <div class="mhead">
+    <div><div class="eyebrow">Acorde${m.ctx?` · ${m.ctx}`:''}</div><h2>${cifra(root)}${m.sym} <span class="muted" style="font-size:.55em;font-weight:500">${nmText(root)} ${c.nm}</span></h2>
+      <div style="margin-top:6px;font-family:var(--serif);font-weight:600">${ns.map(n=>nm(n)).join(' – ')} <span class="muted" style="font-family:var(--sans);font-weight:500;font-size:13px">(${c.iv.map(ivLabel).join(' · ')})</span></div></div>
+    <button class="btn sm" data-act="modal-close">Fechar ✕</button>
+  </div>
+  <h3 class="msec">${invs.length>1?'Inversões':'Formação'}</h3>
+  <div class="scorewrap">${staff}</div>
+  <div class="invgrid" style="margin-top:10px">${invs.map((inv,i)=>`<div class="vcard"><div class="row" style="justify-content:space-between"><b style="font-family:var(--serif);font-size:16px">${invs.length>1?invNames[i]:'Posição fechada'}</b><span class="row" style="gap:6px"><span class="tag">${slash(inv)}</span><button class="ibtn" data-act="inv-play" data-i="${i}" title="Ouvir">▶</button></span></div>
+     <div class="ns">${inv.map(n=>nm(n)).join(' – ')}</div>${keyboardSVG(inv.map(midiOf), inv.map(n=>{ const k = ns.findIndex(x=>x.l===n.l&&x.a===n.a); return ivLabel(c.iv[k]||''); }))}</div>`).join('')}</div>
+  <h3 class="msec">Todas as variações de ${nmText(root)}</h3>
+  ${CHORD_GROUPS.map(([g,l]) => `<div class="eyebrow" style="margin:14px 2px 8px">${g}</div><div class="vgrid">${l.map(([s])=>chordCard(root, s, s===m.sym)).join('')}</div>`).join('')}`;
+}
+function playNotesIn(root, midis, block){
+  ac(); stopPlay(); const t0 = AC.currentTime + .05, step = .32;
+  if (block) midis.forEach(m => pianoNote(m, t0, 2.2));
+  const off = block ? 1.4 : 0;
+  midis.forEach((m,i) => {
+    pianoNote(m, t0+off+i*step, 1.2);
+    playTimers.push(setTimeout(() => { if (!root) return; $$('.kbd .hit', root).forEach(e=>e.classList.remove('hit')); const k = root.querySelector('.kbd [data-m="'+m+'"]'); if (k) k.classList.add('hit'); }, (off+i*step+.05)*1000));
+  });
+  playTimers.push(setTimeout(() => root && $$('.kbd .hit', root).forEach(e=>e.classList.remove('hit')), (off+midis.length*step+.4)*1000));
+}
+function playScore(){
+  const m = S.modal; if (!m) return; ac(); stopPlay();
+  const {cols} = scoreCols(m.id, m.view, m.n), bpm = +($('#sc-bpm')?.value) || 100, dur = 60/bpm, t0 = AC.currentTime + .08;
+  cols.forEach((c,i) => {
+    pianoNote(midiOf(c.R), t0+i*dur, Math.max(.5, dur*1.6)); pianoNote(midiOf(c.L), t0+i*dur, Math.max(.5, dur*1.6));
+    playTimers.push(setTimeout(() => { $$('.score .colhl.on').forEach(e=>e.classList.remove('on')); const r = $(`.score .colhl[data-c="${i}"]`); if (r){ r.classList.add('on'); } }, (i*dur+.08)*1000));
+  });
+  playTimers.push(setTimeout(() => $$('.score .colhl.on').forEach(e=>e.classList.remove('on')), (cols.length*dur+.4)*1000));
+}
+
+/* ---- início ---- */
+(async function init(){
+  renderAll(); setSync();
+  await Store.init();
+  try { S.images = await Store.all(); } catch(e){ S.images = []; }
+  if (!Cloud.on) renderDetail();
+  initCloud();
+})();
+</script>
+
+<script>
+/* App offline: instala o service worker quando servido por http(s) */
+if ('serviceWorker' in navigator && location.protocol.startsWith('http') && !(window.claude && window.claude.use)) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      reg.addEventListener('updatefound', () => {
+        const nw = reg.installing; if (!nw) return;
+        nw.addEventListener('statechange', () => {
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) toast('Nova versão baixada. Feche e abra o app para usar.');
+        });
+      });
+    }).catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
