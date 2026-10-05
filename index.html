@@ -643,9 +643,32 @@ function ac(){
     const comp = AC.createDynamicsCompressor(); comp.connect(AC.destination);
     MASTER = AC.createGain(); MASTER.gain.value = .9; MASTER.connect(comp);
   }
-  if (AC.state === 'suspended') AC.resume();
+  if (AC.state !== 'running') AC.resume().catch(()=>{});
   return AC;
 }
+/* iPhone/iPad: o som da web fica mudo no modo silencioso. Declarar a página
+   como "reprodução de mídia" (e manter um áudio mudo tocando) faz o som sair
+   mesmo assim, como num player de música. */
+const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+const SILENT_WAV = 'data:audio/wav;base64,UklGRkQDAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YSADAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgA==';
+let audioUnlocked = false, silentEl = null;
+function unlockAudio(){
+  try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch(e){}
+  ac();
+  if (audioUnlocked && AC.state === 'running') return;
+  try { const b = AC.createBuffer(1, 1, 22050), src = AC.createBufferSource(); src.buffer = b; src.connect(AC.destination); src.start(0); } catch(e){}
+  if (IS_IOS){
+    try {
+      if (!silentEl){ silentEl = document.createElement('audio'); silentEl.src = SILENT_WAV; silentEl.loop = true; silentEl.setAttribute('playsinline',''); silentEl.preload = 'auto'; }
+      const pr = silentEl.play(); if (pr && pr.then) pr.then(() => { audioUnlocked = true; }).catch(()=>{}); else audioUnlocked = true;
+    } catch(e){}
+  } else audioUnlocked = true;
+}
+['touchend','click','keydown'].forEach(ev => document.addEventListener(ev, unlockAudio, {capture:true, passive:true}));
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden){ if (silentEl) silentEl.pause(); }
+  else if (AC){ AC.resume().catch(()=>{}); if (silentEl && audioUnlocked) silentEl.play().catch(()=>{}); }
+});
 function pianoNote(m, t, len){
   const f = 440 * Math.pow(2, (m-69)/12);
   const g = AC.createGain(), lp = AC.createBiquadFilter();
