@@ -260,10 +260,15 @@ textarea.notes-area{width:100%;min-height:90px;border-radius:12px;border:1px sol
 .lb .lbimg.zoom img{max-width:none;max-height:none;cursor:zoom-out}
 
 /* ---------- metrônomo ---------- */
-.metro-fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;border:0;border-radius:999px;background:var(--ink);color:var(--card);padding:12px 18px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.25);display:flex;gap:8px;align-items:center;font-size:15px}
+.fabs{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:88;display:flex;gap:8px;align-items:center}
+.stop-fab{width:40px;height:40px;border-radius:50%;border:1px solid var(--line2);background:var(--card);color:var(--muted);display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.14);opacity:.75;transition:opacity .2s,background .2s,color .2s,transform .2s}
+.stop-fab:hover{opacity:1}
+.stop-fab.live{opacity:1;background:var(--accent);border-color:var(--accent);color:#fff;transform:scale(1.06)}
+.stop-fab svg{display:block}
+.metro-fab{border:0;border-radius:999px;background:var(--ink);color:var(--card);padding:12px 18px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.25);display:flex;gap:8px;align-items:center;font-size:15px}
 .metro-fab .dot{width:10px;height:10px;border-radius:50%;background:var(--line2)}
 .metro-fab.run .dot{background:var(--accent)}
-.metro{position:fixed;right:16px;bottom:calc(74px + env(safe-area-inset-bottom,0px));z-index:60;width:320px;max-width:calc(100vw - 32px);padding:16px;display:none}
+.metro{position:fixed;right:16px;bottom:calc(74px + env(safe-area-inset-bottom,0px));z-index:88;width:320px;max-width:calc(100vw - 32px);padding:16px;display:none}
 .metro.on{display:block}
 .metro .bpm{font-family:var(--serif);font-size:56px;text-align:center;line-height:1;font-variant-numeric:tabular-nums}
 .metro .bpm small{font-size:16px;color:var(--muted);font-family:var(--sans)}
@@ -456,7 +461,7 @@ textarea.notes-area{width:100%;min-height:90px;border-radius:12px;border:1px sol
   </section>
 </div>
 
-<button class="metro-fab" id="metrofab" data-act="metro-panel"><span class="dot"></span><span>♩ <span id="fabbpm">80</span></span></button>
+<div class="fabs"><button class="stop-fab" id="stopfab" data-act="stop-all" title="Parar todo som" aria-label="Parar todo som"><svg viewBox="0 0 12 12" width="12" height="12"><rect x="1" y="1" width="10" height="10" rx="1.5" fill="currentColor"/></svg></button><button class="metro-fab" id="metrofab" data-act="metro-panel"><span class="dot"></span><span>♩ <span id="fabbpm">80</span></span></button></div>
 <div class="card metro" id="metro"></div>
 
 <div class="lb" id="lb">
@@ -674,14 +679,27 @@ function pianoNote(m, t, len){
   const g = AC.createGain(), lp = AC.createBiquadFilter();
   lp.type='lowpass'; lp.frequency.setValueAtTime(Math.min(9000, f*9), t); lp.frequency.exponentialRampToValueAtTime(Math.max(400,f*2), t+len);
   g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.32, t+0.008); g.gain.exponentialRampToValueAtTime(0.12, t+0.25); g.gain.exponentialRampToValueAtTime(0.0001, t+len);
-  lp.connect(g); g.connect(MASTER);
+  lp.connect(g); g.connect(voiceBus());
+  markPlaying(t + len);
   [[1,'triangle',1],[2,'sine',.35],[3,'sine',.12],[4,'sine',.05]].forEach(([mult,type,amp]) => {
     const o = AC.createOscillator(), og = AC.createGain(); o.type=type; o.frequency.value=f*mult; o.detune.value = (mult-1)*1.5;
     og.gain.value = amp; o.connect(og); og.connect(lp); o.start(t); o.stop(t+len+.05);
   });
 }
 let playTimers = [];
-function stopPlay(){ playTimers.forEach(clearTimeout); playTimers=[]; $$('.kbd .hit').forEach(e=>e.classList.remove('hit')); $$('.score .colhl.on').forEach(e=>e.classList.remove('on')); }
+/* todas as notas passam por um "canal"; parar = fechar o canal na hora */
+let BUS = null, playEnd = 0, liveTimer = null;
+function voiceBus(){ if (!BUS){ BUS = AC.createGain(); BUS.gain.value = 1; BUS.connect(MASTER); } return BUS; }
+function silenceBus(){
+  if (!BUS || !AC) return; const b = BUS; BUS = null;
+  try { b.gain.cancelScheduledValues(AC.currentTime); b.gain.setTargetAtTime(0, AC.currentTime, 0.012); } catch(e){}
+  setTimeout(() => { try { b.disconnect(); } catch(e){} }, 200);
+  playEnd = 0; updateStopFab();
+}
+function markPlaying(endT){ playEnd = Math.max(playEnd, endT); updateStopFab(); clearTimeout(liveTimer); liveTimer = setTimeout(updateStopFab, Math.max(0, (playEnd - AC.currentTime)*1000) + 80); }
+function updateStopFab(){ const f = $('#stopfab'); if (f) f.classList.toggle('live', (!!AC && playEnd > AC.currentTime) || Metro.on); }
+function stopPlay(){ playTimers.forEach(clearTimeout); playTimers=[]; silenceBus(); $$('.kbd .hit').forEach(e=>e.classList.remove('hit')); $$('.score .colhl.on').forEach(e=>e.classList.remove('on')); }
+function stopAll(){ stopPlay(); if (Metro.on) Metro.stop(); updateStopFab(); }
 function playScale(id, mode, root){
   ac(); stopPlay();
   const [ks, type] = id.split('|'); const t = N(ks);
@@ -745,7 +763,7 @@ function renderMetro(){
     </div>`;
 }
 function setBpm(b){ b = Math.max(30, Math.min(240, Math.round(b))); S.settings.metroBpm=b; saveSet(); const e=$('#mbpm'); if(e){ e.textContent=b; $('#mrange').value=b; $('#mtname').textContent=tempoName(b);} $('#fabbpm').textContent=b; }
-function renderMetroState(){ $('#metrofab').classList.toggle('run', Metro.on); const b=$('[data-act="metro-run"]'); if(b){ b.textContent = Metro.on?'■ Parar':'▶ Iniciar'; b.classList.toggle('pri',!Metro.on);} }
+function renderMetroState(){ updateStopFab(); $('#metrofab').classList.toggle('run', Metro.on); const b=$('[data-act="metro-run"]'); if(b){ b.textContent = Metro.on?'■ Parar':'▶ Iniciar'; b.classList.toggle('pri',!Metro.on);} }
 function flashBeat(b){ const sp=$$('#mbeats span'); sp.forEach((s,i)=>s.classList.toggle('a',i===b)); const d=$('#metrofab .dot'); d.style.transform='scale(1.6)'; setTimeout(()=>d.style.transform='',90); }
 
 /* =====================================================================
@@ -1466,6 +1484,7 @@ document.addEventListener('click', e => {
     case 'toggle-scale': if (e.target.closest('button') && e.target.closest('button')!==el) break; S.open.has(id) ? S.open.delete(id) : S.open.add(id); rerenderScale(id); break;
     case 'play': e.stopPropagation(); playScale(id, el.dataset.mode, el.closest('.scale')); break;
     case 'stop': stopPlay(); break;
+    case 'stop-all': stopAll(); toast('Som interrompido.'); break;
     case 'score': e.stopPropagation(); { const pr = S.progress[id]; openModal({kind:'score', id, view:'scale', n:1, bpm: (pr && pr.bpm) || 100}); } break;
     case 'sc-view': S.modal.view = el.dataset.v; S.modal.bpm = +($('#sc-bpm')?.value)||S.modal.bpm; stopPlay(); renderModal(); break;
     case 'sc-n': S.modal.n = +el.dataset.v; S.modal.bpm = +($('#sc-bpm')?.value)||S.modal.bpm; stopPlay(); renderModal(); break;
