@@ -1,6 +1,6 @@
 /* Ciclo das Quintas — funcionamento offline.
    Ao publicar uma versão nova do index.html, aumente VERSION. */
-const VERSION = 'ciclo-v4';
+const VERSION = 'ciclo-v5';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 const FONTS = 'ciclo-fonts';
 

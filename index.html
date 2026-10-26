@@ -18,6 +18,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
+/* Acidentes musicais desenhados para o site: ♯ ♭ ♮ 𝄪 𝄫 (só esses caracteres usam esta fonte) */
+@font-face{font-family:"Acidentes";src:url(data:font/ttf;base64,AAEAAAAKAIAAAwAgT1MvMoWXRsIAAAEoAAAAYGNtYXCJdgEYAAABpAAAAIpnbHlmKGiYRAAAAkAAAAKiaGVhZDBb7wwAAACsAAAANmhoZWEGwgKMAAAA5AAAACRobXR4DbYCIwAAAYgAAAAcbG9jYQEuAgQAAAIwAAAAEG1heHAADgB6AAABCAAAACBuYW1lqE2bDgAABOQAAABmcG9zdARrk44AAAVMAAAAUAABAAAAAQAAURqI0V8PPPUAAwPoAAAAAOcEVfQAAAAA5wRV9ABS/2oC6gLaAAAAAwACAAAAAAAAAAEAAAOE/wYAAAM+AFIAQALqAAEAAAAAAAAAAAAAAAAAAAAHAAEAAAAHAHgABgAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAwH1AZAABQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAgBAAAEAAAAAAAAAPz8/PwAAACD//wOE/wYAAAOEAPoAAAAAAAAAAAAAAAAAAAAgAAABBAAAAQQAAAJEAF8B9AB9AeAAeAJYAFIDPgB9AAAAAwAAAAMAAAAcAAMAAQAAABwAAwAKAAAASgAEAC4AAAAGAAQAAQACACAmb///AAAAICZt////4QAAAAEAAAAEAAAAAwAEAAIADAAAAAAAQAAAAAAAAAAEAAAAIAAAACAAAAABAAAmbQAAJm4AAAADAAAmbwAAJm8AAAACAAHRKgAB0SsAAAAFAAAAAAAAAAAAIwBvAJAAvwFRAAQAX/+SAdsCngADAAcACwAPAAAXETMRNxEzEQElFQURJRUFvjhOOP7jAXz+hAF8/oRuAtD9MDwC0P0wAQFaXFoBM1pcWgACAH3/+wG0AtoAHgA7AAAXETMRPwYzHwgPCT8NLwcPBn06EBERExMTExMSEhAPDgwJBQEECA0RFxshJiwxAxgWFRMSEA4MCggGAwECBAYHCQsLDQ4PDxAREREFAt/+Ug4MCwkHBQMBBAcKDA8SExUVFxcYGBkYGRgXLBAQDxAPDw8ODg4NDQwMCgkHBQQCAQEDBQcJCg0AAAQAeP9qAWQCvAADAAcACwAPAAA3ETMRExEzEQM3FQcRNxUHeDh8OOzs7OzsbgJO/bL+/AJE/bwBhjJaMgEsMloyAAYAUgA0AgYB6AADAAcACwAPABMAFwAANwEXAREBBwEDNTMVMzUzFQE1MxUzNTMVbQFAPv7AAUA+/sAbdMx0/kx0zHSNAUA+/sABfv7APgFA/qV0dHR0AUB0dHR0AAAEAH3/+wLqAtoAHgA7AFoAdwAAFxEzET8GMx8IDwk/DS8HDwYTETMRPwYzHwgPCT8NLwcPBn06EBERExMTExMSEhAPDgwJBQEECA0RFxshJiwxAxgWFRMSEA4MCggGAwECBAYHCQsLDQ4PDxARERH8OhARERMTExMTEhIQDw4MCQUBBAgNERcbISYsMQMYFhUTEhAODAoIBgMBAgQGBwkLCw0ODw8QERERBQLf/lIODAsJBwUDAQQHCgwPEhMVFRcXGBgZGBkYFywQEA8QDw8PDg4ODQ0MDAoJBwUEAgEBAwUHCQoN/v8C3/5SDgwLCQcFAwEEBwoMDxITFRUXFxgYGRgZGBcsEBAPEA8PDw4ODg0NDAwKCQcFBAIBAQMFBwkKDQAAAAAAAAQANgABAAAAAAABAAkAAAABAAAAAAACAAcACQADAAEECQABABIAEAADAAEECQACAA4AIkFjaWRlbnRlc1JlZ3VsYXIAQQBjAGkAZABlAG4AdABlAHMAUgBlAGcAdQBsAGEAcgAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABwAAAAMBAgEDAQQBBQEGBXNoYXJwBGZsYXQHbmF0dXJhbAZkc2hhcnAFZGZsYXQ=) format("truetype");unicode-range:U+266D-266F,U+1D12A-1D12B;font-display:block}
 /* Layout: painel duplo para iPad — ciclo fixo à esquerda, caderno da tonalidade à direita;
    em retrato e Split View, ciclo compacto no topo. Visual único escuro (violeta elétrico + cinzas frios + pastéis por tonalidade). */
 :root{
@@ -30,9 +32,9 @@
   --white-key:#ebe8f2; --black-key:#0b0a10;
   --shadow:0 1px 0 rgba(255,255,255,.035) inset, 0 12px 32px rgba(0,0,0,.34);
   --glow:0 0 0 1px rgba(155,109,255,.45), 0 8px 28px rgba(110,70,240,.30);
-  --display:"Instrument Serif", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-  --serif:"Figtree", -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
-  --sans:"Figtree", -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+  --display:"Acidentes","Instrument Serif", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --serif:"Acidentes","Figtree", -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+  --sans:"Acidentes","Figtree", -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
   --r:18px;
   color-scheme: dark;
 }
@@ -553,7 +555,7 @@ function N(str){
 const pcOf   = n => ((NAT[n.l] + n.a) % 12 + 12) % 12;
 const fifths = n => FIF[n.l] + 7*n.a;
 const kStr   = n => LET[n.l] + (n.a > 0 ? '#'.repeat(n.a) : 'b'.repeat(-n.a));
-const ACC_SYM = {'-2':'♭♭','-1':'♭','0':'','1':'♯','2':'×'};
+const ACC_SYM = {'-2':'𝄫','-1':'♭','0':'','1':'♯','2':'𝄪'};
 const ACC_EXT = {'-2':' dobrado bemol','-1':' bemol','0':'','1':' sustenido','2':' dobrado sustenido'};
 
 function nmText(n, mode){
@@ -843,6 +845,30 @@ function posScore(p){
   const P=POS[p], ids=[P.maj[0]+'|maj', P.min[0]+'|nat', P.min[0]+'|harm', P.min[0]+'|mel'];
   return ids.reduce((a,id)=>a+((S.progress[id]&&S.progress[id].s)||0),0) / (ids.length*3);
 }
+/* posições enarmônicas (Si/Dó♭, Fá♯/Sol♭, Ré♭/Dó♯): escreve como a tonalidade em foco
+   escreveria — com bemóis numa tonalidade de bemóis, com sustenidos numa de sustenidos */
+function curSig(){ const P = POS[S.sel.pos]; return sigOf(P.maj[S.sel.alt]||P.maj[0]); }
+function spellIdx(p, ctx){
+  const L = POS[p].maj; if (L.length < 2 || !ctx) return 0;
+  const i = L.findIndex(k => Math.sign(sigOf(k)) === Math.sign(ctx)); return i < 0 ? 0 : i;
+}
+/* graus diatônicos que cada fatia ocupa na tonalidade escolhida */
+function romanAt(p, sel){
+  if (!S.settings.window) return {};
+  const d = ((p - sel.pos + 18) % 12) - 6;   // -1, 0, +1 = vizinhos no ciclo
+  if (d < -1 || d > 1) return {};
+  const i = d + 1;
+  return sel.q==='maj' ? {maj:['IV','I','V'][i], min:['ii','vi','iii'][i]} : {maj:['VI','III','VII'][i], min:['iv','i','v'][i]};
+}
+/* linhas empilhadas e sempre na vertical da tela, centradas no meio da fatia */
+function stack(r, a, lines){
+  lines = lines.filter(Boolean); const [x,y] = P2(r,a);
+  const lh = l => l.size * (l.cls==='wnum' ? 1.05 : 1.12), H = lines.reduce((s,l)=>s+lh(l),0);
+  let cur = -H/2, out = `<g class="up" style="transform-origin:${x}px ${y}px">`;
+  for (const l of lines){ const cy = +(y + cur + lh(l)/2).toFixed(2); cur += lh(l);
+    out += `<text class="${l.cls}" x="${x}" y="${cy}" font-size="${l.size}" text-anchor="middle" dominant-baseline="central" style="${l.style||''}" ${l.attrs||''}>${l.t}</text>`; }
+  return out + '</g>';
+}
 function renderWheel(){
   const sel = S.sel;
   const R = {mi0:100, mi1:160, ma0:160, ma1:234};
@@ -851,24 +877,29 @@ function renderWheel(){
     <radialGradient id="wCenter" cx="0" cy="-40" r="120" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#2a2342"/><stop offset="1" stop-color="#13111b"/></radialGradient>
     <linearGradient id="wRing" x1="-96" y1="-96" x2="96" y2="96" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d6c6ff"/><stop offset="1" stop-color="#5a3dd8"/></linearGradient>
   </defs><g id="rot"><circle r="${R.ma1+1}" fill="#0f0d16"/>`;
+  let lab = ''; const ctxSig = curSig();   // rótulos por cima da janela diatônica
   for (let p=0;p<12;p++){
-    const a = p*30, a0=a-15, a1=a+15, P = POS[p];
+    const a = p*30, a0=a-15, a1=a+15, P0 = POS[p];
+    const k = p===sel.pos ? sel.alt : spellIdx(p, ctxSig);
+    const P = k ? {maj:[P0.maj[k], ...P0.maj.filter((_,j)=>j!==k)], min:[P0.min[k], ...P0.min.filter((_,j)=>j!==k)]} : P0;
     const sM = sel.pos===p && sel.q==='maj', sm = sel.pos===p && sel.q==='min';
-    h += `<path class="sector ${sM?'sel':''}" d="${arc(R.ma0,R.ma1,a0,a1)}" fill="${sM?'url(#wSel)':`hsl(${hue(p)} 13% 15.5%)`}" data-act="sel" data-pos="${p}" data-q="maj"/>`;
-    h += `<path class="sector ${sm?'sel':''}" d="${arc(R.mi0,R.mi1,a0,a1)}" fill="${sm?'url(#wSel)':`hsl(${hue(p)} 11% 11.5%)`}" data-act="sel" data-pos="${p}" data-q="min"/>`;
+    h += `<path class="sector ${sM?'sel':''}" d="${arc(R.ma0,R.ma1,a0,a1)}" fill="${sM?'url(#wSel)':`hsl(${hue(p)} 13% 15.5%)`}" data-act="sel" data-pos="${p}" data-alt="${k}" data-q="maj"/>`;
+    h += `<path class="sector ${sm?'sel':''}" d="${arc(R.mi0,R.mi1,a0,a1)}" fill="${sm?'url(#wSel)':`hsl(${hue(p)} 11% 11.5%)`}" data-act="sel" data-pos="${p}" data-alt="${k}" data-q="min"/>`;
     // filete pastel: a cor de identidade de cada tonalidade
     h += `<path class="wrim" d="M${P2(R.ma1-4,a0+3).join(',')}A${R.ma1-4},${R.ma1-4} 0 0 1 ${P2(R.ma1-4,a1-3).join(',')}" stroke="${kcolor(p)}" opacity="${sM?1:.75}"/>`;
     const fM = sM ? '#ffffff' : 'var(--ink)', fm = sm ? '#ffffff' : 'var(--ink2)';
-    if (P.maj.length > 1){
-      const [x,y]=P2(199,a);
-      h += upText(x,y-7,'wtxt',23,wheelName(P.maj[0],'maj'),'font-weight="700"',`fill:${fM}`,x,y);
-      h += upText(x,y+15,'wtxt small',12,wheelName(P.maj[1],'maj'),'',`fill:${fM};opacity:.6`,x,y);
-    } else { const [x,y]=P2(198,a); h += upText(x,y,'wtxt',25,wheelName(P.maj[0],'maj'),'font-weight="700"',`fill:${fM}`); }
-    if (P.min.length > 1){
-      const [x,y]=P2(131,a);
-      h += upText(x,y-6,'wtxt',15.5,wheelName(P.min[0],'min'),'font-weight="600"',`fill:${fm}`,x,y);
-      h += upText(x,y+10,'wtxt small',10,wheelName(P.min[1],'min'),'',`fill:${fm};opacity:.6`,x,y);
-    } else { const [x,y]=P2(130,a); h += upText(x,y,'wtxt',16.5,wheelName(P.min[0],'min'),'font-weight="600"',`fill:${fm}`); }
+    const rn = romanAt(p, sel);
+    const nM = sM ? '#ffffff' : 'var(--accent2)', nmn = sm ? '#ffffff' : 'var(--accent2)';
+    lab += stack(199, a, [
+      rn.maj && {t: rn.maj, size: 14.5, cls: 'wnum', style: `fill:${nM}`},
+      {t: wheelName(P.maj[0],'maj'), size: P.maj.length>1 ? 23 : 25, cls: 'wtxt', attrs: 'font-weight="700"', style: `fill:${fM}`},
+      P.maj[1] && {t: wheelName(P.maj[1],'maj'), size: 12, cls: 'wtxt small', style: `fill:${fM};opacity:.62`},
+    ]);
+    lab += stack(130, a, [
+      rn.min && {t: rn.min, size: 12.5, cls: 'wnum', style: `fill:${nmn}`},
+      {t: wheelName(P.min[0],'min'), size: P.min.length>1 ? 15 : 16.5, cls: 'wtxt', attrs: 'font-weight="600"', style: `fill:${fm}`},
+      P.min[1] && {t: wheelName(P.min[1],'min'), size: 10, cls: 'wtxt small', style: `fill:${fm};opacity:.62`},
+    ]);
     const sigs = P.maj.map(sigOf).map(s => s===0?'0':s>0?s+'♯':(-s)+'♭').join(' / ');
     const [sx,sy]=P2(256,a); h += upText(sx,sy,'wsig',11,sigs);
     if (S.settings.progress){
@@ -880,14 +911,8 @@ function renderWheel(){
   if (S.settings.window){
     const a = sel.pos*30;
     h += `<path class="wwin" d="${arc(R.mi0-1,R.ma1+1,a-45,a+45)}"/>`;
-    const nums = sel.q==='maj' ? {maj:['IV','I','V'], min:['ii','vi','iii']} : {maj:['VI','III','VII'], min:['iv','i','v']};
-    [-1,0,1].forEach((d,i) => {
-      const aa = (sel.pos+d)*30;
-      const [x,y]=P2(220,aa); h += upText(x,y,'wnum',15,nums.maj[i]);
-      const [x2,y2]=P2(110,aa); h += upText(x2,y2,'wnum',13,nums.min[i]);
-    });
   }
-  h += '</g>';
+  h += lab + '</g>';
   const P = POS[sel.pos], ms = P.maj[sel.alt]||P.maj[0], mn = P.min[sel.alt]||P.min[0];
   const s = sigOf(ms);
   const main = sel.q==='maj' ? nmText(N(ms),'pt')+' maior' : nmText(N(mn),'pt')+' menor';
@@ -1099,9 +1124,9 @@ function renderDetail(){
   // vizinhos
   const nb = [];
   const dom = (pos+1)%12, sub = (pos+11)%12;
-  const pick = (p, qq) => { const PP=POS[p]; return qq==='maj' ? PP.maj[0] : PP.min[0]; };
-  nb.push(`<button class="pill" data-act="sel" data-pos="${dom}" data-q="${q}" data-alt="0">Dominante (V): <b>${nm(N(pick(dom,q)))} ${q==='maj'?'maior':'menor'}</b></button>`);
-  nb.push(`<button class="pill" data-act="sel" data-pos="${sub}" data-q="${q}" data-alt="0">Subdominante (IV): <b>${nm(N(pick(sub,q)))} ${q==='maj'?'maior':'menor'}</b></button>`);
+  const pick = (p, qq) => { const PP=POS[p], i=spellIdx(p, sig); return qq==='maj' ? PP.maj[i] : PP.min[i]; };
+  nb.push(`<button class="pill" data-act="sel" data-pos="${dom}" data-q="${q}" data-alt="${spellIdx(dom, sig)}" title="Tonalidade vizinha uma quinta acima (sentido horário)">Tom da dominante: <b>${nm(N(pick(dom,q)))} ${q==='maj'?'maior':'menor'}</b></button>`);
+  nb.push(`<button class="pill" data-act="sel" data-pos="${sub}" data-q="${q}" data-alt="${spellIdx(sub, sig)}" title="Tonalidade vizinha uma quinta abaixo (sentido anti-horário)">Tom da subdominante: <b>${nm(N(pick(sub,q)))} ${q==='maj'?'maior':'menor'}</b></button>`);
   nb.push(`<button class="pill" data-act="sel" data-pos="${pos}" data-alt="${alt}" data-q="${q==='maj'?'min':'maj'}">Relativa: <b>${q==='maj'?nm(m)+' menor':nm(M)+' maior'}</b></button>`);
   const hq = q==='maj'?'min':'maj', H = locate(focusT, hq);
   if (H){ const HP = POS[H.pos]; const hs = hq==='maj'?(HP.maj[H.alt]||HP.maj[0]):(HP.min[H.alt]||HP.min[0]); const same = pcOf(N(hs))===pcOf(focusT) && N(hs).l===focusT.l;
@@ -1582,7 +1607,7 @@ document.addEventListener('click', e => {
       S.log.push({id:uid(), date:today(), min, txt, bpm:'', ts:Date.now()}); saveLog(); S.session=null; Wake.flags.sess = false; Wake.sync(); renderPratica(); toast(`Sessão de ${min} min registrada.`);
     } break;
     case 'sess-cancel': S.session=null; Wake.flags.sess = false; Wake.sync(); renderSess(); break;
-    case 'nav': selectKey((S.sel.pos + (+el.dataset.d) + 12) % 12, S.sel.q, 0); break;
+    case 'nav': { const np = (S.sel.pos + (+el.dataset.d) + 12) % 12; selectKey(np, S.sel.q, spellIdx(np, curSig())); } break;
     case 'wake': S.settings.wake = !S.settings.wake; saveSet(); Wake.sync(); toast(S.settings.wake ? 'A tela vai ficar acesa enquanto o site estiver aberto.' : 'A tela volta a apagar normalmente.'); break;
     case 'sc-stand': { const m = S.modal; m.stand = !m.stand; $('#modal').classList.toggle('stand', m.stand); Wake.flags.stand = m.stand; Wake.sync();
       try { if (m.stand && !document.fullscreenElement && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(()=>{}); else if (!m.stand && document.fullscreenElement) document.exitFullscreen().catch(()=>{}); } catch(_){}
@@ -1622,7 +1647,7 @@ document.addEventListener('keydown', e => {
     if ((k==='m' || k==='M')){ Metro.on ? Metro.stop() : Metro.start(); return; }
     if (S.modal && S.modal.kind==='score' && ['1','2','3'].includes(k)){ S.modal.n = +k; S.modal.bpm = +($('#sc-bpm')?.value)||S.modal.bpm; stopPlay(); renderModal(); return; }
     if (!S.modal && S.view==='ciclo'){
-      if (k==='ArrowRight' || k==='ArrowLeft'){ e.preventDefault(); selectKey((S.sel.pos + (k==='ArrowRight'?1:-1) + 12) % 12, S.sel.q, 0); return; }
+      if (k==='ArrowRight' || k==='ArrowLeft'){ e.preventDefault(); const np = (S.sel.pos + (k==='ArrowRight'?1:-1) + 12) % 12; selectKey(np, S.sel.q, spellIdx(np, curSig())); return; }
       if (k==='ArrowUp' || k==='ArrowDown'){ e.preventDefault(); selectKey(S.sel.pos, S.sel.q==='maj'?'min':'maj', S.sel.alt); return; }
       if (k==='p' || k==='P'){ const id = mainScale(); if (id){ const pr = S.progress[id]; openModal({kind:'score', id, view:'scale', n:1, bpm:(pr&&pr.bpm)||100}); } return; }
     }
@@ -1940,7 +1965,7 @@ function chordStaffSVG(chords){
 /* =====================================================================
    MODAIS — partitura da escala/arpejo e variações de acordes
    ===================================================================== */
-ACC_SYM['3']='♯×'; ACC_SYM['-3']='♭♭♭'; ACC_EXT['3']=' triplo sustenido'; ACC_EXT['-3']=' triplo bemol';
+ACC_SYM['3']='♯𝄪'; ACC_SYM['-3']='♭𝄫'; ACC_EXT['3']=' triplo sustenido'; ACC_EXT['-3']=' triplo bemol';
 const midiOf = n => 12*(n.oct+1) + NAT[n.l] + n.a;
 function spellI(root, steps, semis, rootOct){
   const abs = root.l + steps, l = abs % 7;
@@ -2135,7 +2160,7 @@ document.addEventListener('pointerdown', () => { if (Wake.want && !Wake.lock) Wa
     const s = st; st = null; if (!s.moved) return;
     svg.classList.remove('drag'); suppress = true; setTimeout(() => suppress = false, 350);
     const rot = s.rot0 + s.d, pos = ((Math.round(-rot/30) % 12) + 12) % 12;
-    S.rot = rot; selectKey(pos, S.sel.q, pos===S.sel.pos ? S.sel.alt : 0);
+    S.rot = rot; selectKey(pos, S.sel.q, pos===S.sel.pos ? S.sel.alt : spellIdx(pos, curSig()));
   };
   svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', end);
   svg.addEventListener('click', e => { if (suppress){ e.stopPropagation(); e.preventDefault(); } }, true);
